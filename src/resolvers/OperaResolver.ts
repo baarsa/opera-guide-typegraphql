@@ -1,6 +1,6 @@
-import {FieldResolver, Query, Resolver, Root} from "type-graphql";
+import {Arg, FieldResolver, Int, Query, Resolver, Root} from "type-graphql";
 import { Opera } from "../types/Opera";
-import {operas} from "../data/operas";
+import {OperaData, operas} from "../data/operas";
 import {composers} from "../data/composers";
 
 @Resolver(Opera)
@@ -11,8 +11,15 @@ export class OperaResolver {
         return operas;
     }
 
+    @Query(returns => Opera)
+    opera(
+        @Arg('id', type => Int) id: number
+    ) {
+        return operas.find(opera => opera.id = id);
+    }
+
     @FieldResolver()
-    author(@Root() operaData) {
+    author(@Root() operaData: OperaData) {
         return composers.find(({ id }) => id === operaData.authorId);
     }
 }

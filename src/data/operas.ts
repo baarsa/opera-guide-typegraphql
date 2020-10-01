@@ -1,4 +1,10 @@
 
+export type OperaData = {
+    id: number;
+    name: string;
+    creationYear: number;
+    authorId: number;
+}
 
 export const operas = [
     {

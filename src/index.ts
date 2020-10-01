@@ -7,7 +7,7 @@ import {ComposerResolver} from "./resolvers/ComposerResolver";
 
 async function startServer() {
     const schema = await buildSchema({
-        resolvers: [BookResolver, OperaResolver, ComposerResolver],
+        resolvers: [OperaResolver, ComposerResolver],
     });
     const server = new ApolloServer({ schema });
     await server.listen(4000);
