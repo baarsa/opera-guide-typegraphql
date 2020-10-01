@@ -1,5 +1,5 @@
 import {FieldResolver, Query, Resolver, Root} from "type-graphql";
-import { composers } from "../data/composers";
+import {ComposerData, composers} from "../data/composers";
 import { operas } from "../data/operas";
 import {Composer} from "../types/Composer";
 
@@ -11,7 +11,7 @@ export class ComposerResolver {
     }
 
     @FieldResolver()
-    operas(@Root() composerData) {
+    operas(@Root() composerData: ComposerData) {
         return operas.filter(({ authorId }) => authorId === composerData.id);
     }
 }

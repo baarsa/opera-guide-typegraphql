@@ -12,6 +12,18 @@ export const operas = [
         name: 'Tristan und Isolde',
         creationYear: 1850,
         authorId: 1,
+    },
+    {
+        id: 2,
+        name: 'Travi',
+        creationYear: 1852,
+        authorId: 1,
+    },
+    {
+        id: 3,
+        name: 'Parsifal',
+        creationYear: 1882,
+        authorId: 1,
     }
 ];
 
