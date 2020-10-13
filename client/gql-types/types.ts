@@ -29,6 +29,7 @@ export type Opera = {
   name: Scalars['String'];
   creationYear: Scalars['Int'];
   author: Composer;
+  roles: Array<Role>;
 };
 
 export type Composer = {
@@ -37,6 +38,41 @@ export type Composer = {
   name: Scalars['String'];
   birthYear: Scalars['Int'];
   operas: Array<Opera>;
+};
+
+export type Role = {
+  __typename?: 'Role';
+  name: Scalars['String'];
+  voice: VoiceType;
+};
+
+export enum VoiceType {
+  Bass = 'Bass',
+  Baritone = 'Baritone',
+  Tenor = 'Tenor',
+  Contralto = 'Contralto',
+  Mezzo = 'Mezzo',
+  Soprano = 'Soprano'
+}
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  upcomingPerformance: Performance;
+};
+
+export type Performance = {
+  __typename?: 'Performance';
+  id: Scalars['String'];
+  opera: Opera;
+  performers: Array<Performer>;
+  location: Scalars['String'];
+  date: Scalars['String'];
+};
+
+export type Performer = {
+  __typename?: 'Performer';
+  name: Scalars['String'];
+  voice: VoiceType;
 };
 
 export type GetOperaQueryVariables = Exact<{

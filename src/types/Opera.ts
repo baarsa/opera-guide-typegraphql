@@ -1,5 +1,6 @@
 import {Field, ID, Int, ObjectType} from "type-graphql";
 import {Composer} from "./Composer";
+import {Role} from "./Role";
 
 @ObjectType()
 export class Opera {
@@ -15,4 +16,6 @@ export class Opera {
     @Field(type => Composer)
     author: Composer;
 
+    @Field(type => [Role])
+    roles: [Role];
 }
