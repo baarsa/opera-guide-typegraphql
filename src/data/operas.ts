@@ -9,7 +9,7 @@ export type OperaData = {
 
 export const operas = [
     {
-        id: 1,
+        id: '1',
         name: 'Tristan und Isolde',
         creationYear: 1850,
         authorId: 1,
@@ -19,14 +19,14 @@ export const operas = [
         ]
     },
     {
-        id: 2,
+        id: '2',
         name: 'Traviata',
         creationYear: 1852,
         authorId: 2,
         roles: [],
     },
     {
-        id: 3,
+        id: '3',
         name: 'Parsifal',
         creationYear: 1882,
         authorId: 1,

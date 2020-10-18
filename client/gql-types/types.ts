@@ -20,7 +20,7 @@ export type Query = {
 
 
 export type QueryOperaArgs = {
-  id: Scalars['Int'];
+  id: Scalars['ID'];
 };
 
 export type Opera = {
@@ -76,7 +76,7 @@ export type Performer = {
 };
 
 export type GetOperaQueryVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['ID'];
 }>;
 
 
@@ -92,9 +92,26 @@ export type GetOperaQuery = (
   ) }
 );
 
+export type GetOperaRolesQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetOperaRolesQuery = (
+  { __typename?: 'Query' }
+  & { opera: (
+    { __typename?: 'Opera' }
+    & Pick<Opera, 'id'>
+    & { roles: Array<(
+      { __typename?: 'Role' }
+      & Pick<Role, 'name' | 'voice'>
+    )> }
+  ) }
+);
+
 
 export const GetOperaDocument = gql`
-    query GetOpera($id: Int!) {
+    query GetOpera($id: ID!) {
   opera(id: $id) {
     id
     name
@@ -131,3 +148,40 @@ export function useGetOperaLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetOperaQueryHookResult = ReturnType<typeof useGetOperaQuery>;
 export type GetOperaLazyQueryHookResult = ReturnType<typeof useGetOperaLazyQuery>;
 export type GetOperaQueryResult = Apollo.QueryResult<GetOperaQuery, GetOperaQueryVariables>;
+export const GetOperaRolesDocument = gql`
+    query GetOperaRoles($id: ID!) {
+  opera(id: $id) {
+    id
+    roles {
+      name
+      voice
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetOperaRolesQuery__
+ *
+ * To run a query within a React component, call `useGetOperaRolesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOperaRolesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOperaRolesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetOperaRolesQuery(baseOptions?: Apollo.QueryHookOptions<GetOperaRolesQuery, GetOperaRolesQueryVariables>) {
+        return Apollo.useQuery<GetOperaRolesQuery, GetOperaRolesQueryVariables>(GetOperaRolesDocument, baseOptions);
+      }
+export function useGetOperaRolesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOperaRolesQuery, GetOperaRolesQueryVariables>) {
+          return Apollo.useLazyQuery<GetOperaRolesQuery, GetOperaRolesQueryVariables>(GetOperaRolesDocument, baseOptions);
+        }
+export type GetOperaRolesQueryHookResult = ReturnType<typeof useGetOperaRolesQuery>;
+export type GetOperaRolesLazyQueryHookResult = ReturnType<typeof useGetOperaRolesLazyQuery>;
+export type GetOperaRolesQueryResult = Apollo.QueryResult<GetOperaRolesQuery, GetOperaRolesQueryVariables>;
