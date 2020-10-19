@@ -55,6 +55,28 @@ export enum VoiceType {
   Soprano = 'Soprano'
 }
 
+export type Mutation = {
+  __typename?: 'Mutation';
+  addOpera: Opera;
+};
+
+
+export type MutationAddOperaArgs = {
+  data: OperaInput;
+};
+
+export type OperaInput = {
+  name: Scalars['String'];
+  creationYear: Scalars['Int'];
+  authorId: Scalars['String'];
+  roles: Array<RoleInput>;
+};
+
+export type RoleInput = {
+  name: Scalars['String'];
+  voice: VoiceType;
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   upcomingPerformance: Performance;
