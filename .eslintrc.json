@@ -16,6 +16,6 @@
     "project": "tsconfig.json",
     "tsconfigRootDir": "."
   },
-  "plugins": ["@typescript-eslint", "react", "react-hooks"],
+  "plugins": ["@typescript-eslint", "react", "react-hooks", "testing-library", "jest-dom"],
   "rules": {}
 }

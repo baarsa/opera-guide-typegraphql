@@ -131,6 +131,30 @@ export type GetOperaRolesQuery = (
   ) }
 );
 
+export type GetAllComposersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllComposersQuery = (
+  { __typename?: 'Query' }
+  & { composers: Array<(
+    { __typename?: 'Composer' }
+    & Pick<Composer, 'id' | 'name'>
+  )> }
+);
+
+export type AddOperaMutationVariables = Exact<{
+  operaData: OperaInput;
+}>;
+
+
+export type AddOperaMutation = (
+  { __typename?: 'Mutation' }
+  & { addOpera: (
+    { __typename?: 'Opera' }
+    & Pick<Opera, 'name'>
+  ) }
+);
+
 
 export const GetOperaDocument = gql`
     query GetOpera($id: ID!) {
@@ -207,3 +231,68 @@ export function useGetOperaRolesLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type GetOperaRolesQueryHookResult = ReturnType<typeof useGetOperaRolesQuery>;
 export type GetOperaRolesLazyQueryHookResult = ReturnType<typeof useGetOperaRolesLazyQuery>;
 export type GetOperaRolesQueryResult = Apollo.QueryResult<GetOperaRolesQuery, GetOperaRolesQueryVariables>;
+export const GetAllComposersDocument = gql`
+    query GetAllComposers {
+  composers {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useGetAllComposersQuery__
+ *
+ * To run a query within a React component, call `useGetAllComposersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllComposersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllComposersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllComposersQuery(baseOptions?: Apollo.QueryHookOptions<GetAllComposersQuery, GetAllComposersQueryVariables>) {
+        return Apollo.useQuery<GetAllComposersQuery, GetAllComposersQueryVariables>(GetAllComposersDocument, baseOptions);
+      }
+export function useGetAllComposersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllComposersQuery, GetAllComposersQueryVariables>) {
+          return Apollo.useLazyQuery<GetAllComposersQuery, GetAllComposersQueryVariables>(GetAllComposersDocument, baseOptions);
+        }
+export type GetAllComposersQueryHookResult = ReturnType<typeof useGetAllComposersQuery>;
+export type GetAllComposersLazyQueryHookResult = ReturnType<typeof useGetAllComposersLazyQuery>;
+export type GetAllComposersQueryResult = Apollo.QueryResult<GetAllComposersQuery, GetAllComposersQueryVariables>;
+export const AddOperaDocument = gql`
+    mutation AddOpera($operaData: OperaInput!) {
+  addOpera(data: $operaData) {
+    name
+  }
+}
+    `;
+export type AddOperaMutationFn = Apollo.MutationFunction<AddOperaMutation, AddOperaMutationVariables>;
+
+/**
+ * __useAddOperaMutation__
+ *
+ * To run a mutation, you first call `useAddOperaMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddOperaMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addOperaMutation, { data, loading, error }] = useAddOperaMutation({
+ *   variables: {
+ *      operaData: // value for 'operaData'
+ *   },
+ * });
+ */
+export function useAddOperaMutation(baseOptions?: Apollo.MutationHookOptions<AddOperaMutation, AddOperaMutationVariables>) {
+        return Apollo.useMutation<AddOperaMutation, AddOperaMutationVariables>(AddOperaDocument, baseOptions);
+      }
+export type AddOperaMutationHookResult = ReturnType<typeof useAddOperaMutation>;
+export type AddOperaMutationResult = Apollo.MutationResult<AddOperaMutation>;
+export type AddOperaMutationOptions = Apollo.BaseMutationOptions<AddOperaMutation, AddOperaMutationVariables>;

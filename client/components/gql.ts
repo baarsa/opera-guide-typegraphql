@@ -24,3 +24,20 @@ export const GET_OPERA_ROLES = gql`
         }
     }
 `;
+
+export const GET_ALL_COMPOSERS = gql`
+    query GetAllComposers {
+        composers {
+            id
+            name
+        }
+    }
+`;
+
+export const ADD_OPERA = gql`
+    mutation AddOpera($operaData: OperaInput!) {
+        addOpera(data: $operaData) {
+            name
+        }
+    }
+`
