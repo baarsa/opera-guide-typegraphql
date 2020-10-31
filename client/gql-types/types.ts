@@ -155,6 +155,28 @@ export type AddOperaMutation = (
   ) }
 );
 
+export type PerformanceSubscriptionSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PerformanceSubscriptionSubscription = (
+  { __typename?: 'Subscription' }
+  & { upcomingPerformance: (
+    { __typename?: 'Performance' }
+    & Pick<Performance, 'location' | 'date'>
+    & { opera: (
+      { __typename?: 'Opera' }
+      & Pick<Opera, 'name'>
+      & { author: (
+        { __typename?: 'Composer' }
+        & Pick<Composer, 'name'>
+      ) }
+    ), performers: Array<(
+      { __typename?: 'Performer' }
+      & Pick<Performer, 'name'>
+    )> }
+  ) }
+);
+
 
 export const GetOperaDocument = gql`
     query GetOpera($id: ID!) {
@@ -296,3 +318,41 @@ export function useAddOperaMutation(baseOptions?: Apollo.MutationHookOptions<Add
 export type AddOperaMutationHookResult = ReturnType<typeof useAddOperaMutation>;
 export type AddOperaMutationResult = Apollo.MutationResult<AddOperaMutation>;
 export type AddOperaMutationOptions = Apollo.BaseMutationOptions<AddOperaMutation, AddOperaMutationVariables>;
+export const PerformanceSubscriptionDocument = gql`
+    subscription PerformanceSubscription {
+  upcomingPerformance {
+    opera {
+      name
+      author {
+        name
+      }
+    }
+    performers {
+      name
+    }
+    location
+    date
+  }
+}
+    `;
+
+/**
+ * __usePerformanceSubscriptionSubscription__
+ *
+ * To run a query within a React component, call `usePerformanceSubscriptionSubscription` and pass it any options that fit your needs.
+ * When your component renders, `usePerformanceSubscriptionSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePerformanceSubscriptionSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePerformanceSubscriptionSubscription(baseOptions?: Apollo.SubscriptionHookOptions<PerformanceSubscriptionSubscription, PerformanceSubscriptionSubscriptionVariables>) {
+        return Apollo.useSubscription<PerformanceSubscriptionSubscription, PerformanceSubscriptionSubscriptionVariables>(PerformanceSubscriptionDocument, baseOptions);
+      }
+export type PerformanceSubscriptionSubscriptionHookResult = ReturnType<typeof usePerformanceSubscriptionSubscription>;
+export type PerformanceSubscriptionSubscriptionResult = Apollo.SubscriptionResult<PerformanceSubscriptionSubscription>;

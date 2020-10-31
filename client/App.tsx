@@ -5,14 +5,14 @@ import 'react-notifications-component/dist/theme.css'
 
 import { client } from './apollo-client-setup';
 import {CreateOpera} from "./components/create-opera/create-opera";
+import {PerformanceSubscriber} from "./components/performance-subscriber/performance-subscriber";
 
 export const App = () =>
     <ApolloProvider client={client}>
         <ReactNotification />
-        <div>This is not the whole app... for now...</div>
+        <PerformanceSubscriber />
         <CreateOpera
             onCreationSuccess={(name) => {
-                console.log('added');
                 store.addNotification({title: name, container: 'top-right', message: 'Opera added', type: "success"});
             }}
         />

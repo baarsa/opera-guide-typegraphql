@@ -40,4 +40,22 @@ export const ADD_OPERA = gql`
             name
         }
     }
-`
+`;
+
+export const PERFORMANCE_SUBSCRIPTION = gql`
+    subscription PerformanceSubscription {
+        upcomingPerformance {
+            opera {
+                name 
+                author {
+                    name
+                }
+            }
+            performers {
+                name
+            }
+            location
+            date
+        }
+    }
+`;
