@@ -177,6 +177,21 @@ export type PerformanceSubscriptionSubscription = (
   ) }
 );
 
+export type GetAllOperasQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllOperasQuery = (
+  { __typename?: 'Query' }
+  & { operas: Array<(
+    { __typename?: 'Opera' }
+    & Pick<Opera, 'id' | 'name'>
+    & { author: (
+      { __typename?: 'Composer' }
+      & Pick<Composer, 'name'>
+    ) }
+  )> }
+);
+
 
 export const GetOperaDocument = gql`
     query GetOpera($id: ID!) {
@@ -356,3 +371,39 @@ export function usePerformanceSubscriptionSubscription(baseOptions?: Apollo.Subs
       }
 export type PerformanceSubscriptionSubscriptionHookResult = ReturnType<typeof usePerformanceSubscriptionSubscription>;
 export type PerformanceSubscriptionSubscriptionResult = Apollo.SubscriptionResult<PerformanceSubscriptionSubscription>;
+export const GetAllOperasDocument = gql`
+    query GetAllOperas {
+  operas {
+    id
+    name
+    author {
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetAllOperasQuery__
+ *
+ * To run a query within a React component, call `useGetAllOperasQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllOperasQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllOperasQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllOperasQuery(baseOptions?: Apollo.QueryHookOptions<GetAllOperasQuery, GetAllOperasQueryVariables>) {
+        return Apollo.useQuery<GetAllOperasQuery, GetAllOperasQueryVariables>(GetAllOperasDocument, baseOptions);
+      }
+export function useGetAllOperasLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllOperasQuery, GetAllOperasQueryVariables>) {
+          return Apollo.useLazyQuery<GetAllOperasQuery, GetAllOperasQueryVariables>(GetAllOperasDocument, baseOptions);
+        }
+export type GetAllOperasQueryHookResult = ReturnType<typeof useGetAllOperasQuery>;
+export type GetAllOperasLazyQueryHookResult = ReturnType<typeof useGetAllOperasLazyQuery>;
+export type GetAllOperasQueryResult = Apollo.QueryResult<GetAllOperasQuery, GetAllOperasQueryVariables>;

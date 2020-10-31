@@ -59,3 +59,15 @@ export const PERFORMANCE_SUBSCRIPTION = gql`
         }
     }
 `;
+
+export const GET_ALL_OPERAS = gql`
+    query GetAllOperas {
+        operas {
+            id,
+            name,
+            author {
+                name,
+            }
+        }
+    }
+`;
