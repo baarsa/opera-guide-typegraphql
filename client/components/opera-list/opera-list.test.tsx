@@ -3,6 +3,7 @@ import { MockedProvider } from '@apollo/client/testing';
 import {render, waitFor} from "@testing-library/react";
 import {OperaList} from "./opera-list";
 import { GetAllOperasDocument } from '../../gql-types/types';
+import { MemoryRouter } from 'react-router-dom';
 
 const operaNames = ['Die Walküre', 'Der Rosenkavalier'];
 
@@ -25,7 +26,9 @@ const mocks = [{
 
 const renderOperaList = () => render(
     <MockedProvider mocks={mocks} addTypename={false}>
-        <OperaList />
+        <MemoryRouter>
+            <OperaList />
+        </MemoryRouter>
     </MockedProvider>
 );
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from "react-router-dom";
 import {useGetAllOperasQuery} from "../../gql-types/types";
 
 export const OperaList = () => {
@@ -10,7 +11,7 @@ export const OperaList = () => {
         <div>
             {
                 data.operas.map(({ id, name, author: { name: authorName } }) => (
-                    <div key={ id }><a href='/'>{ name }</a> ({ authorName })</div>
+                    <div key={ id }><Link to={`/operas/${id}`}>{ name }</Link> ({ authorName })</div>
                 ))
             }
         </div>
