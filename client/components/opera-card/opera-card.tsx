@@ -21,12 +21,17 @@ export const OperaCard = ({ operaId }: Props) => {
             <div>{ data.opera.name }, {data.opera.creationYear}</div>
             by
             <div>{ data.opera.author.name }</div>
-            <button onClick={() => getRoles({ variables: { id: operaId } })}>Show characters</button>
+            <button onClick={() => {
+                if (rolesData === undefined) {
+                    getRoles({variables: {id: operaId}});
+                }
+                setAreRolesVisible(!rolesAreVisible);
+            }}>Show characters</button>
             { rolesAreVisible
                 ? <div>
                     {
                         rolesData !== undefined
-                            ? rolesData.opera.roles.map(({ name, voice }) => <div>{ name }: { voice }</div>)
+                            ? rolesData.opera.roles.map(({ name, voice }) => <div key={ name }>{ name }: { voice }</div>)
                             : null
                     }
                 </div>
