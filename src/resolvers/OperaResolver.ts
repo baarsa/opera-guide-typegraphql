@@ -15,7 +15,7 @@ export class OperaResolver {
     opera(
         @Arg('id', type => ID) id: string
     ) {
-        return operas.find(opera => opera.id = id);
+        return operas.find(opera => opera.id === id);
     }
 
     @Mutation(returns => Opera)

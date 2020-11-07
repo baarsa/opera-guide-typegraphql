@@ -17,7 +17,7 @@ export class PerformanceResolver {
 
     @FieldResolver()
     opera(@Root() perfData: PerformanceData) {
-        return operas.find(opera => opera.id = perfData.operaId);
+        return operas.find(opera => opera.id === perfData.operaId);
     }
 
     @FieldResolver()
