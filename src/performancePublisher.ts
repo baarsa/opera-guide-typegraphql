@@ -35,5 +35,5 @@ const publish = () => {
 };
 
 export const startPublishing = () => {
-    setInterval(publish, 5000);
+    setInterval(publish, 10000);
 };

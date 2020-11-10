@@ -37,7 +37,11 @@ export const GET_ALL_COMPOSERS = gql`
 export const ADD_OPERA = gql`
     mutation AddOpera($operaData: OperaInput!) {
         addOpera(data: $operaData) {
-            name
+            id,
+            name,
+            author {
+                name,
+            }
         }
     }
 `;

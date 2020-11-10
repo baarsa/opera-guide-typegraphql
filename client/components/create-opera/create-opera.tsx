@@ -5,20 +5,37 @@ export type CreateOperaProps = {
     onCreationSuccess?: (name: string) => void;
 }
 
+const INIT_YEAR_VALUE = '1800';
+const INIT_VOICE_TYPE = VoiceType.Soprano;
+
 export const CreateOpera = ({ onCreationSuccess = () => {} }: CreateOperaProps) => {
     const [name, setName] = useState('');
-    const [year, setYear] = useState(1800);
+    const [year, setYear] = useState(INIT_YEAR_VALUE);
     const [authorId, setAuthorId] = useState('');
     const [roles, setRoles] = useState<Role[]>([]);
     const [newRoleName, setNewRoleName] = useState('');
-    const [newRoleVoice, setNewRoleVoice] = useState<VoiceType>(VoiceType.Soprano);
+    const [newRoleVoice, setNewRoleVoice] = useState<VoiceType>(INIT_VOICE_TYPE);
 
-    const composers = useGetAllComposersQuery();
-    // add types
-    // add success message and drop inputs
+    const composers = useGetAllComposersQuery({
+        onCompleted: (data) => {
+            setAuthorId(data.composers[0].id);
+        },
+    });
     const [addOpera, { loading, error }] = useAddOperaMutation({
         onCompleted: (response) => {
             onCreationSuccess(response.addOpera.name);
+            setName('');
+            setYear(INIT_YEAR_VALUE);
+            setRoles([]);
+        },
+        update: (cache, data) => {
+            cache.modify({
+                fields: {
+                    operas(prevOperas) {
+                        return [...prevOperas, data.data.addOpera];
+                    }
+                }
+            })
         },
     });
     if (composers.loading) {
@@ -32,7 +49,7 @@ export const CreateOpera = ({ onCreationSuccess = () => {} }: CreateOperaProps) 
                 variables: {
                     operaData: {
                         name,
-                        creationYear: year,
+                        creationYear: Number(year),
                         authorId,
                         roles,
                     }
@@ -42,7 +59,7 @@ export const CreateOpera = ({ onCreationSuccess = () => {} }: CreateOperaProps) 
             <label htmlFor='name'>Name</label>
             <input id='name' value={name} onChange={e => setName(e.target.value)} />
             <label htmlFor='creationYear'>Year of creation</label>
-            <input id='creationYear' type='number' value={year} onChange={e => setYear(Number(e.target.value))} />
+            <input id='creationYear' type='number' value={year} onChange={e => setYear(e.target.value)} />
             <label htmlFor='author'>Author</label>
             <select id='author' value={authorId} onChange={e => setAuthorId(e.target.value)}>
                 {
@@ -50,8 +67,10 @@ export const CreateOpera = ({ onCreationSuccess = () => {} }: CreateOperaProps) 
                 }
             </select>
             {
-                roles.map(role => <div>
-                    <div>[x]</div>
+                roles.map(role => <div key={ role.name }>
+                    <div onClick={() => {
+                        setRoles(roles => roles.filter(({ name }) => name !== role.name));
+                    }}>[x]</div>
                     <div>Name: { role.name }</div>
                     <div>Voice: { role.voice }</div>
                 </div>)
@@ -69,7 +88,12 @@ export const CreateOpera = ({ onCreationSuccess = () => {} }: CreateOperaProps) 
                     <option value={ VoiceType.Bass }>{ VoiceType.Bass }</option>
                 </select>
                 <button
-                    onClick={() => setRoles(roles => [...roles, { name: newRoleName, voice: newRoleVoice }])}
+                    type='button'
+                    onClick={() => {
+                        setRoles(roles => [...roles, {name: newRoleName, voice: newRoleVoice}]);
+                        setNewRoleName('');
+                        setNewRoleVoice(INIT_VOICE_TYPE);
+                    }}
                 >
                     Add role
                 </button>

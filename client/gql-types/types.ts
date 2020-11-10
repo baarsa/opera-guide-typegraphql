@@ -151,7 +151,11 @@ export type AddOperaMutation = (
   { __typename?: 'Mutation' }
   & { addOpera: (
     { __typename?: 'Opera' }
-    & Pick<Opera, 'name'>
+    & Pick<Opera, 'id' | 'name'>
+    & { author: (
+      { __typename?: 'Composer' }
+      & Pick<Composer, 'name'>
+    ) }
   ) }
 );
 
@@ -304,7 +308,11 @@ export type GetAllComposersQueryResult = Apollo.QueryResult<GetAllComposersQuery
 export const AddOperaDocument = gql`
     mutation AddOpera($operaData: OperaInput!) {
   addOpera(data: $operaData) {
+    id
     name
+    author {
+      name
+    }
   }
 }
     `;
