@@ -42,6 +42,10 @@ export const CreateOpera = ({ onCreationSuccess = () => {} }: CreateOperaProps) 
         //todo standard spinner
         return <div>'Loading...'</div>;
     }
+    if (composers.error) {
+        //todo standard spinner
+        return <div>Error</div>;
+    }
     return (
         <form onSubmit={(e) => {
             e.preventDefault();

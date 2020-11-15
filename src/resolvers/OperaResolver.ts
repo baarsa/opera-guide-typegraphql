@@ -1,7 +1,8 @@
 import {Arg, FieldResolver, ID, Int, Mutation, Query, Resolver, Root} from "type-graphql";
 import {Opera, OperaInput} from "../types/Opera";
-import {OperaData, operas} from "../data/operas";
+import {OperaData, operas, resetOperas} from "../data/operas";
 import {composers} from "../data/composers";
+import {GraphQLString} from "graphql";
 
 @Resolver(Opera)
 export class OperaResolver {
@@ -26,6 +27,12 @@ export class OperaResolver {
             id: newId,
         });
         return operas[operas.length - 1];
+    }
+
+    @Mutation(returns => GraphQLString)
+    resetOperas() {
+        resetOperas();
+        return 'OK';
     }
 
     @FieldResolver()

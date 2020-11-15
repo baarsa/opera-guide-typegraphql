@@ -9,7 +9,7 @@ export type OperaData = {
     roles: Role[]
 }
 
-export const operas: OperaData[] = [
+const initOperas: OperaData[] = [
     {
         id: '1',
         name: 'Tristan und Isolde',
@@ -18,6 +18,9 @@ export const operas: OperaData[] = [
         roles: [
             { name: 'Tristan', voice: VoiceType.Tenor },
             { name: 'Isolde', voice: VoiceType.Soprano },
+            { name: 'Brangäne', voice: VoiceType.Soprano },
+            { name: 'Kurwenal', voice: VoiceType.Baritone },
+            { name: 'Marke', voice: VoiceType.Bass },
         ]
     },
     {
@@ -35,5 +38,8 @@ export const operas: OperaData[] = [
         roles: [],
     }
 ];
+
+export let operas = [...initOperas];
+export const resetOperas = () => operas = [...initOperas];
 
 
