@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import {usePerformanceSubscriptionSubscription} from "../../gql-types/types";
-import { store } from 'react-notifications-component'
+import { store } from 'react-notifications-component';
+import 'animate.css';
 
 export const PerformanceSubscriber: FC = () => {
     usePerformanceSubscriptionSubscription({
@@ -12,6 +13,8 @@ export const PerformanceSubscriber: FC = () => {
                 title: name,
                 container: 'top-right',
                 message, type: 'info',
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
                 dismiss: {
                     duration: 2000
                 },

@@ -58,6 +58,7 @@ export enum VoiceType {
 export type Mutation = {
   __typename?: 'Mutation';
   addOpera: Opera;
+  resetOperas: Scalars['String'];
 };
 
 

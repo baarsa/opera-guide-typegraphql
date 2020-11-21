@@ -5,6 +5,8 @@ import 'react-notifications-component/dist/theme.css';
 import {PerformanceSubscriber} from "./components/performance-subscriber/performance-subscriber";
 import {Operas} from "./pages/operas/operas";
 import {Navigation} from "./components/navigation/navigation";
+import styled from "styled-components";
+import {StyledBlock} from "./components/styled-block/styled-block";
 
 const navigationItems = [
     {
@@ -19,6 +21,22 @@ const navigationItems = [
     },
 ];
 
+const AppContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;  
+  font-family: Raleway,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 18px;  
+  color: white;
+  background: #659dbd;
+`;
+
+const Content = styled(StyledBlock)`
+  margin-top: 20px;  
+  font-size: 24px;
+`;
+
 export const App = () => {
     const location = useLocation();
     const actualNavigationItems = navigationItems.map(item => ({
@@ -26,15 +44,17 @@ export const App = () => {
         isActive: location.pathname === item.link,
     }));
         return (
-            <>
+            <AppContainer>
             <ReactNotification/>
             <PerformanceSubscriber/>
                 <Navigation items={ actualNavigationItems }/>
-                <Switch>
-                    <Route path='/operas' component={Operas}/>
-                    <Redirect to='/operas'/>
-                </Switch>
-            </>
+                <Content>
+                    <Switch>
+                        <Route path='/operas' component={Operas}/>
+                        <Redirect to='/operas'/>
+                    </Switch>
+                </Content>
+            </AppContainer>
         );
     }
 ;
