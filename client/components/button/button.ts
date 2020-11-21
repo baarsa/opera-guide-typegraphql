@@ -10,4 +10,7 @@ export const Button = styled.button`
   color: white;
   font-weight: bold;
   padding: 10px;
+  &:disabled {
+    background: #5f0c0e
+  }
 `;

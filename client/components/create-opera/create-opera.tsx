@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Role,
   useAddOperaMutation,
@@ -7,7 +7,7 @@ import {
 } from "../../gql-types/types";
 import styled from "styled-components";
 import { RoleItem } from "./role-item";
-import {Button} from "../button/button";
+import { Button } from "../button/button";
 
 export type CreateOperaProps = {
   onCreationSuccess?: (name: string) => void;
@@ -75,6 +75,16 @@ export const CreateOpera = ({
   const [newRoleName, setNewRoleName] = useState("");
   const [newRoleVoice, setNewRoleVoice] = useState<VoiceType>(INIT_VOICE_TYPE);
 
+  const formValidationError = useMemo(() => {
+    if (name.length === 0) {
+      return "Enter the name of the opera";
+    }
+    if (roles.length === 0) {
+      return "Add at least one role";
+    }
+    return null;
+  }, [roles, name]);
+
   const composers = useGetAllComposersQuery({
     onCompleted: (data) => {
       setAuthorId(data.composers[0].id);
@@ -87,11 +97,14 @@ export const CreateOpera = ({
       setYear(INIT_YEAR_VALUE);
       setRoles([]);
     },
-    update: (cache, data) => {
+    update: (cache, { data }) => {
+      if (data === null || data === undefined) {
+        return;
+      }
       cache.modify({
         fields: {
           operas(prevOperas) {
-            return [...prevOperas, data.data.addOpera];
+            return [...prevOperas, data.addOpera];
           },
         },
       });
@@ -101,7 +114,7 @@ export const CreateOpera = ({
     //todo standard spinner
     return <div>'Loading...'</div>;
   }
-  if (composers.error) {
+  if (composers.error || composers.data === undefined) {
     //todo standard spinner
     return <div>Error</div>;
   }
@@ -208,7 +221,13 @@ export const CreateOpera = ({
           ))}
         </Column>
       </UpperPart>
-      <Button type="submit">Submit</Button>
+      <Button
+        disabled={formValidationError !== null}
+        type="submit"
+        title={formValidationError === null ? undefined : formValidationError}
+      >
+        Submit
+      </Button>
     </Form>
   );
 };

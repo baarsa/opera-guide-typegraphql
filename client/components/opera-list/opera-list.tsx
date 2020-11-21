@@ -20,7 +20,7 @@ export const OperaList = () => {
   if (loading) {
     return <div>Loading...</div>;
   }
-  if (error) {
+  if (error || data === undefined) {
     return <div>Error!</div>;
   }
   return (
