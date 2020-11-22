@@ -16,7 +16,7 @@
     "start-server-prod": "cross-env NODE_ENV=production node dist/server/index.js",
     "build-client-prod": "webpack --config webpack.prod.js",
     "build": "npm run build-server-prod && npm run build-client-prod",
-    "start": "npm run start-server-prod"
+    "start": "node dist/server/index.js"
   },
   "keywords": [],
   "author": "",
