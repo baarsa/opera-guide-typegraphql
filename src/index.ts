@@ -17,7 +17,7 @@ async function startApolloServer() {
     const server = new ApolloServer({
         schema,
     });
-    await server.listen(4000);
+    await server.listen({ port: 4000, url: '/graphql'});
 }
 
 startApolloServer();
