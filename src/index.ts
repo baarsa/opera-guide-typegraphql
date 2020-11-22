@@ -8,7 +8,7 @@ import {PerformanceResolver} from "./resolvers/PerformanceResolver";
 
 import * as express from 'express';
 const path = require('path');
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4000;
 
 async function startApolloServer() {
     const schema = await buildSchema({
@@ -17,7 +17,7 @@ async function startApolloServer() {
     const server = new ApolloServer({
         schema,
     });
-    await server.listen({ port: 4000, url: '/graphql'});
+    await server.listen({ port: PORT, url: '/graphql'});
 }
 
 startApolloServer();
