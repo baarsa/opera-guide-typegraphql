@@ -7,7 +7,6 @@
     "test": "jest --coverage",
     "lint": "eslint --cache --ext .ts,.tsx client",
     "start-server": "nodemon -w src --ext ts --exec ts-node src/index.ts",
-    "build": "webpack",
     "generate": "graphql-codegen",
     "generate-watch": "graphql-codegen --watch",
     "start-client:dev": "webpack-dev-server --config webpack.dev.js",
@@ -16,7 +15,8 @@
     "build-server-prod": "tsc --project src/tsconfig.json",
     "start-server-prod": "cross-env NODE_ENV=production node dist/server/index.js",
     "build-client-prod": "webpack --config webpack.prod.js",
-    "start": "npm run build-server-prod && npm run build-client-prod && npm run start-server-prod"
+    "build": "npm run build-server-prod && npm run build-client-prod",
+    "start": "npm run start-server-prod"
   },
   "keywords": [],
   "author": "",
