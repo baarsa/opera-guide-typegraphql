@@ -7,15 +7,16 @@ import {
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 
-const graphqlUri = process.env.GRAPHQL_URI || 'localhost:4000/graphql';
+const graphqlHttpUri = process.env.GRAPHQL_HTTP_URI || 'http://localhost:4000/graphql';
+const graphqlWsUri = process.env.GRAPHQL_WS_URI || 'ws://localhost:4000/graphql';
 
 const cache = new InMemoryCache();
 const httpLink = createHttpLink({
-    uri: `http://${graphqlUri}`,
+    uri: graphqlHttpUri,
 });
 
 const wsLink = new WebSocketLink({
-    uri: `ws://${graphqlUri}`,
+    uri: graphqlWsUri,
     options: {
         reconnect: true
     }
