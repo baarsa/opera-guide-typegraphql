@@ -5,7 +5,7 @@ module.exports = {
     entry: path.resolve(__dirname, 'client/index.tsx'),
     output: {
         publicPath: "/",
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'dist', 'client'),
         filename: "bundle.js"
     },
     plugins: [
@@ -37,12 +37,4 @@ module.exports = {
     resolve: {
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
     },
-    mode: "development",
-    devServer: {
-        contentBase: path.resolve(__dirname, 'dist'),
-        port: 1234,
-        compress: true,
-        hot: true,
-        historyApiFallback: true,
-    }
 };

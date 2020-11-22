@@ -10,9 +10,13 @@
     "build": "webpack",
     "generate": "graphql-codegen",
     "generate-watch": "graphql-codegen --watch",
-    "start-client:dev": "webpack-dev-server",
+    "start-client:dev": "webpack-dev-server --config webpack.dev.js",
     "start-dev": "concurrently \"npm run start-server\" \"npm run start-client:dev\" \"npm run generate-watch\"",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "build-server-prod": "tsc --project src/tsconfig.json",
+    "start-server-prod": "cross-env NODE_ENV=production node dist/server/index.js",
+    "build-client-prod": "webpack --config webpack.prod.js",
+    "start": "npm run build-server-prod && npm run build-client-prod && npm run start-server-prod"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +24,7 @@
   "dependencies": {
     "@apollo/react-hooks": "^4.0.0",
     "@babel/plugin-transform-runtime": "^7.12.1",
+    "@types/express": "4.17.1",
     "@types/jest": "^26.0.14",
     "@types/react": "^16.9.49",
     "@types/react-dom": "^16.9.8",
@@ -36,6 +41,7 @@
     "concurrently": "^5.3.0",
     "css-loader": "^5.0.0",
     "eslint": "^7.11.0",
+    "express": "4.17.1",
     "graphql": "^15.3.0",
     "graphql-subscriptions": "^1.1.0",
     "graphql-tag": "^2.11.0",
@@ -67,6 +73,7 @@
     "@typescript-eslint/eslint-plugin": "^4.4.1",
     "@typescript-eslint/parser": "^4.4.1",
     "babel-loader": "^8.1.0",
+    "cross-env": "^7.0.2",
     "cypress": "^5.6.0",
     "eslint-plugin-jest-dom": "^3.2.3",
     "eslint-plugin-react": "^7.21.4",
@@ -80,6 +87,7 @@
     "ts-node": "^9.0.0",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^3.11.0",
+    "webpack-merge": "^5.4.0"
   }
 }
