@@ -70,11 +70,6 @@ describe('create-opera', () => {
         const addRoleButton = await waitFor(() => getByRole('button', { name: 'Add role' }));
         expect(addRoleButton).toBeDefined();
     });
-    it('should render submit button', async () => {
-        const { getByRole } = renderComponent();
-        const submitButton = await waitFor(() =>  getByRole('button', { name: 'Submit' }));
-        expect(submitButton).toBeDefined();
-    });
     it('should add role name/voice description after click on add role button', async () => {
         const { getByRole, getByLabelText, getByText } = renderComponent();
         const roleName = await waitFor(() => getByLabelText('Role name'));
