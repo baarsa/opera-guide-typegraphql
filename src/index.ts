@@ -9,7 +9,7 @@ import {ComposerResolver} from "./resolvers/ComposerResolver";
 import {startPublishing} from "./performancePublisher";
 import {PerformanceResolver} from "./resolvers/PerformanceResolver";
 
-import * as express from 'express';
+import express from 'express';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 const path = require('path');
 const PORT = process.env.PORT || 4000;

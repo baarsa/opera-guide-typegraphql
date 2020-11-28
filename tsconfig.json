@@ -10,7 +10,8 @@
     "jsx": "react",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": ["es2018", "esnext.asynciterable", "dom"]
+    "lib": ["es2018", "esnext.asynciterable", "dom"],
+    "skipLibCheck": true
   },
   "include": ["client/**/*"]
 }
