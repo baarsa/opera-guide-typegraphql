@@ -13,9 +13,6 @@ const renderComponent = (props: CreateOperaProps = {}) => render(<MockedProvider
     );
 
 describe('create-opera', () => {
-    it('should match snapshot', () => {
-        expect(renderComponent()).toMatchSnapshot();
-    });
     it('should render all form fields', async () => {
         const { getByLabelText } = renderComponent();
         const nameInput = await waitFor(() => getByLabelText('Name'));
