@@ -4,44 +4,8 @@ import '@testing-library/jest-dom'
 import userEvent from '@testing-library/user-event'
 import {CreateOpera, CreateOperaProps} from "./create-opera";
 import {MockedProvider} from "@apollo/client/testing";
-import {GetAllComposersDocument, OperaInput, VoiceType} from "../../gql-types/types";
-import {ADD_OPERA} from "../gql";
-
-const createdOperaData: OperaInput = {
-    name: 'Das Rheingold',
-    creationYear: 1869,
-    authorId: '1',
-    roles: [{
-        name: 'Alberich',
-        voice: VoiceType.Bass,
-    }],
-};
-
-const mocks = [{
-    request: {
-        query: GetAllComposersDocument,
-    },
-    result: {
-        data: {
-            composers: [{id: '1', name: 'Wagner'}, {id: '2', name: 'Verdi'}],
-        },
-    },
-},
-    {
-    request: {
-        query: ADD_OPERA,
-        variables: {
-            operaData: createdOperaData,
-        }
-    },
-    result: {
-        data: {
-            addOpera: {
-                name: createdOperaData.name,
-            },
-        },
-    },
-}];
+import {VoiceType} from "../../gql-types/types";
+import { createdOperaData, mocks } from "./__mocks";
 
 const renderComponent = (props: CreateOperaProps = {}) => render(<MockedProvider mocks={mocks} addTypename={false}>
         <CreateOpera {...props} />
@@ -49,6 +13,9 @@ const renderComponent = (props: CreateOperaProps = {}) => render(<MockedProvider
     );
 
 describe('create-opera', () => {
+    it('should match snapshot', () => {
+        expect(renderComponent()).toMatchSnapshot();
+    });
     it('should render all form fields', async () => {
         const { getByLabelText } = renderComponent();
         const nameInput = await waitFor(() => getByLabelText('Name'));

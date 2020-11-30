@@ -1,65 +1,9 @@
 import React from 'react';
 import {MockedProvider} from '@apollo/client/testing';
-import {GetOperaDocument, GetOperaRolesDocument, VoiceType} from "../../gql-types/types";
 import {render, waitFor} from '@testing-library/react';
 import {OperaCard} from "./opera-card";
 import userEvent from "@testing-library/user-event";
-
-const operaName = 'Parsifal';
-const authorName = 'Richard Wagner';
-
-const characters = [
-    { name: 'Parsifal', voice: VoiceType.Tenor },
-    { name: 'Kundri', voice: VoiceType.Soprano },
-    { name: 'Klingsor', voice: VoiceType.Bass },
-    ];
-
-const mocks = [{
-    request: {
-        query: GetOperaDocument,
-        variables: {
-            id: '1',
-        }
-    },
-    result: {
-        data: {
-            opera: {
-                id: '1',
-                name: operaName,
-                creationYear: 1882,
-                author: {
-                    name: authorName,
-                },
-                __typename: 'Opera',
-            }
-        }
-    },
-}, {
-    request: {
-        query: GetOperaDocument,
-        variables: {
-            id: '0',
-        }
-    },
-    error: new Error(),
-}, {
-    request: {
-        query: GetOperaRolesDocument,
-        variables: {
-            id: '1',
-        }
-    },
-    result: {
-        data: {
-            opera: {
-                id: '1',
-                roles: characters,
-                __typename: 'Opera',
-            }
-        }
-    }
-}
-];
+import { authorName, characters, mocks, operaName } from "./__mocks";
 
 describe('opera-card', () => {
     it('should render opera name and author name', async () => {

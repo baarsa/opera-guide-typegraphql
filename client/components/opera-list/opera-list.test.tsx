@@ -2,27 +2,8 @@ import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
 import {render, waitFor} from "@testing-library/react";
 import {OperaList} from "./opera-list";
-import { GetAllOperasDocument } from '../../gql-types/types';
 import { MemoryRouter } from 'react-router-dom';
-
-const operaNames = ['Die Walküre', 'Der Rosenkavalier'];
-
-const mocks = [{
-    request: {
-        query: GetAllOperasDocument,
-    },
-    result: {
-        data: {
-            operas: operaNames.map((name, i) => ({
-                id: i,
-                name,
-                author: {
-                    name: 'author',
-                }
-            })),
-        }
-    }
-}];
+import { mocks, operaNames } from "./__mocks";
 
 const renderOperaList = () => render(
     <MockedProvider mocks={mocks} addTypename={false}>
