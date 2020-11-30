@@ -15,5 +15,10 @@ export const composers = [
         id: '2',
         name: 'Giuseppe Verdi',
         birthYear: 1813,
-    }
+    },
+    {
+        id: '3',
+        name: 'Wolfgang Mozart',
+        birthYear: 1756,
+    },
 ];
