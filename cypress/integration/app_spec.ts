@@ -16,7 +16,7 @@ describe('the app', () => {
     it('should display list of operas', () => {
         cy.visit('/');
         cy.findByText('Tristan und Isolde');
-        cy.findByText('Traviata');
+        cy.findByText('Aida');
         cy.findByText('Parsifal');
     });
     it('should go to opera page when clicked on opera', () => {
@@ -41,7 +41,7 @@ describe('opera page', () => {
         cy.findByText(/tristan.+tenor/i);
         cy.findByText(/isolde.+soprano/i);
         cy.findByText(/marke.+bass/i);
-        cy.findByRole('button', { name: /show characters/i }).click();
+        cy.findByRole('button', { name: /hide characters/i }).click();
         cy.findByText(/tristan.+tenor/i).should('not.exist');
         cy.findByText(/isolde.+soprano/i).should('not.exist');
         cy.findByText(/marke.+bass/i).should('not.exist');
@@ -54,17 +54,17 @@ describe('opera creation form', () => {
     });
     it('can successfully create opera, should show notification, redirect to operas list and display new opera in list', () => {
         cy.visit('/operas/create');
-        cy.findByLabelText('Name').type('Aida');
-        cy.findByLabelText('Year of creation').clear().type('1870');
-        cy.findByLabelText('Author').select('Giuseppe Verdi');
-        cy.findByLabelText('Role name').type('Aida');
-        cy.findByLabelText('Role voice').select('Soprano');
-        cy.findByRole('button', { name: 'Add role' }).click();
-        cy.findByLabelText('Role name').type('Radames');
+        cy.findByLabelText('Name').type('Lohengrin');
+        cy.findByLabelText('Year of creation').clear().type('1850');
+        cy.findByLabelText('Author').select('Richard Wagner');
+        cy.findByLabelText('Role name').type('Lohengrin');
         cy.findByLabelText('Role voice').select('Tenor');
         cy.findByRole('button', { name: 'Add role' }).click();
-        cy.findByLabelText('Role name').type('Amneris');
-        cy.findByLabelText('Role voice').select('Mezzo');
+        cy.findByLabelText('Role name').type('Elsa');
+        cy.findByLabelText('Role voice').select('Soprano');
+        cy.findByRole('button', { name: 'Add role' }).click();
+        cy.findByLabelText('Role name').type('Friedrich');
+        cy.findByLabelText('Role voice').select('Baritone');
         cy.findByRole('button', { name: 'Add role' }).click();
         cy.findByRole('button', { name: 'Submit' }).click();
 

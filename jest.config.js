@@ -14,5 +14,6 @@ module.exports = {
     "collectCoverageFrom": [
         "<rootDir>/client/**/*.{ts,tsx}",
         "!**/types.ts",
+        "!**/apollo-client-setup.ts",
     ]
 };
