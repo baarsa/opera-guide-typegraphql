@@ -2,6 +2,9 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions =  {}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -11,49 +14,14 @@ export type Scalars = {
   Float: number;
 };
 
-export type Query = {
-  __typename?: 'Query';
-  operas: Array<Opera>;
-  opera: Opera;
-  composers: Array<Composer>;
-};
-
-
-export type QueryOperaArgs = {
-  id: Scalars['ID'];
-};
-
-export type Opera = {
-  __typename?: 'Opera';
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  creationYear: Scalars['Int'];
-  author: Composer;
-  roles: Array<Role>;
-};
-
 export type Composer = {
   __typename?: 'Composer';
   id: Scalars['ID'];
   name: Scalars['String'];
+  nicknameQQ: Scalars['String'];
   birthYear: Scalars['Int'];
   operas: Array<Opera>;
 };
-
-export type Role = {
-  __typename?: 'Role';
-  name: Scalars['String'];
-  voice: VoiceType;
-};
-
-export enum VoiceType {
-  Bass = 'Bass',
-  Baritone = 'Baritone',
-  Tenor = 'Tenor',
-  Contralto = 'Contralto',
-  Mezzo = 'Mezzo',
-  Soprano = 'Soprano'
-}
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -66,21 +34,20 @@ export type MutationAddOperaArgs = {
   data: OperaInput;
 };
 
+export type Opera = {
+  __typename?: 'Opera';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  creationYear: Scalars['Int'];
+  author: Composer;
+  roles: Array<Role>;
+};
+
 export type OperaInput = {
   name: Scalars['String'];
   creationYear: Scalars['Int'];
   authorId: Scalars['String'];
   roles: Array<RoleInput>;
-};
-
-export type RoleInput = {
-  name: Scalars['String'];
-  voice: VoiceType;
-};
-
-export type Subscription = {
-  __typename?: 'Subscription';
-  upcomingPerformance: Performance;
 };
 
 export type Performance = {
@@ -97,6 +64,43 @@ export type Performer = {
   name: Scalars['String'];
   voice: VoiceType;
 };
+
+export type Query = {
+  __typename?: 'Query';
+  operas: Array<Opera>;
+  opera: Opera;
+  composers: Array<Composer>;
+};
+
+
+export type QueryOperaArgs = {
+  id: Scalars['ID'];
+};
+
+export type Role = {
+  __typename?: 'Role';
+  name: Scalars['String'];
+  voice: VoiceType;
+};
+
+export type RoleInput = {
+  name: Scalars['String'];
+  voice: VoiceType;
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  upcomingPerformance: Performance;
+};
+
+export enum VoiceType {
+  Bass = 'Bass',
+  Baritone = 'Baritone',
+  Tenor = 'Tenor',
+  Contralto = 'Contralto',
+  Mezzo = 'Mezzo',
+  Soprano = 'Soprano'
+}
 
 export type GetOperaQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -227,11 +231,13 @@ export const GetOperaDocument = gql`
  *   },
  * });
  */
-export function useGetOperaQuery(baseOptions?: Apollo.QueryHookOptions<GetOperaQuery, GetOperaQueryVariables>) {
-        return Apollo.useQuery<GetOperaQuery, GetOperaQueryVariables>(GetOperaDocument, baseOptions);
+export function useGetOperaQuery(baseOptions: Apollo.QueryHookOptions<GetOperaQuery, GetOperaQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOperaQuery, GetOperaQueryVariables>(GetOperaDocument, options);
       }
 export function useGetOperaLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOperaQuery, GetOperaQueryVariables>) {
-          return Apollo.useLazyQuery<GetOperaQuery, GetOperaQueryVariables>(GetOperaDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOperaQuery, GetOperaQueryVariables>(GetOperaDocument, options);
         }
 export type GetOperaQueryHookResult = ReturnType<typeof useGetOperaQuery>;
 export type GetOperaLazyQueryHookResult = ReturnType<typeof useGetOperaLazyQuery>;
@@ -264,11 +270,13 @@ export const GetOperaRolesDocument = gql`
  *   },
  * });
  */
-export function useGetOperaRolesQuery(baseOptions?: Apollo.QueryHookOptions<GetOperaRolesQuery, GetOperaRolesQueryVariables>) {
-        return Apollo.useQuery<GetOperaRolesQuery, GetOperaRolesQueryVariables>(GetOperaRolesDocument, baseOptions);
+export function useGetOperaRolesQuery(baseOptions: Apollo.QueryHookOptions<GetOperaRolesQuery, GetOperaRolesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOperaRolesQuery, GetOperaRolesQueryVariables>(GetOperaRolesDocument, options);
       }
 export function useGetOperaRolesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOperaRolesQuery, GetOperaRolesQueryVariables>) {
-          return Apollo.useLazyQuery<GetOperaRolesQuery, GetOperaRolesQueryVariables>(GetOperaRolesDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOperaRolesQuery, GetOperaRolesQueryVariables>(GetOperaRolesDocument, options);
         }
 export type GetOperaRolesQueryHookResult = ReturnType<typeof useGetOperaRolesQuery>;
 export type GetOperaRolesLazyQueryHookResult = ReturnType<typeof useGetOperaRolesLazyQuery>;
@@ -298,10 +306,12 @@ export const GetAllComposersDocument = gql`
  * });
  */
 export function useGetAllComposersQuery(baseOptions?: Apollo.QueryHookOptions<GetAllComposersQuery, GetAllComposersQueryVariables>) {
-        return Apollo.useQuery<GetAllComposersQuery, GetAllComposersQueryVariables>(GetAllComposersDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllComposersQuery, GetAllComposersQueryVariables>(GetAllComposersDocument, options);
       }
 export function useGetAllComposersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllComposersQuery, GetAllComposersQueryVariables>) {
-          return Apollo.useLazyQuery<GetAllComposersQuery, GetAllComposersQueryVariables>(GetAllComposersDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllComposersQuery, GetAllComposersQueryVariables>(GetAllComposersDocument, options);
         }
 export type GetAllComposersQueryHookResult = ReturnType<typeof useGetAllComposersQuery>;
 export type GetAllComposersLazyQueryHookResult = ReturnType<typeof useGetAllComposersLazyQuery>;
@@ -337,7 +347,8 @@ export type AddOperaMutationFn = Apollo.MutationFunction<AddOperaMutation, AddOp
  * });
  */
 export function useAddOperaMutation(baseOptions?: Apollo.MutationHookOptions<AddOperaMutation, AddOperaMutationVariables>) {
-        return Apollo.useMutation<AddOperaMutation, AddOperaMutationVariables>(AddOperaDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddOperaMutation, AddOperaMutationVariables>(AddOperaDocument, options);
       }
 export type AddOperaMutationHookResult = ReturnType<typeof useAddOperaMutation>;
 export type AddOperaMutationResult = Apollo.MutationResult<AddOperaMutation>;
@@ -376,7 +387,8 @@ export const PerformanceSubscriptionDocument = gql`
  * });
  */
 export function usePerformanceSubscriptionSubscription(baseOptions?: Apollo.SubscriptionHookOptions<PerformanceSubscriptionSubscription, PerformanceSubscriptionSubscriptionVariables>) {
-        return Apollo.useSubscription<PerformanceSubscriptionSubscription, PerformanceSubscriptionSubscriptionVariables>(PerformanceSubscriptionDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<PerformanceSubscriptionSubscription, PerformanceSubscriptionSubscriptionVariables>(PerformanceSubscriptionDocument, options);
       }
 export type PerformanceSubscriptionSubscriptionHookResult = ReturnType<typeof usePerformanceSubscriptionSubscription>;
 export type PerformanceSubscriptionSubscriptionResult = Apollo.SubscriptionResult<PerformanceSubscriptionSubscription>;
@@ -408,10 +420,12 @@ export const GetAllOperasDocument = gql`
  * });
  */
 export function useGetAllOperasQuery(baseOptions?: Apollo.QueryHookOptions<GetAllOperasQuery, GetAllOperasQueryVariables>) {
-        return Apollo.useQuery<GetAllOperasQuery, GetAllOperasQueryVariables>(GetAllOperasDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllOperasQuery, GetAllOperasQueryVariables>(GetAllOperasDocument, options);
       }
 export function useGetAllOperasLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllOperasQuery, GetAllOperasQueryVariables>) {
-          return Apollo.useLazyQuery<GetAllOperasQuery, GetAllOperasQueryVariables>(GetAllOperasDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllOperasQuery, GetAllOperasQueryVariables>(GetAllOperasDocument, options);
         }
 export type GetAllOperasQueryHookResult = ReturnType<typeof useGetAllOperasQuery>;
 export type GetAllOperasLazyQueryHookResult = ReturnType<typeof useGetAllOperasLazyQuery>;

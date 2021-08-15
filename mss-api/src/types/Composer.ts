@@ -9,6 +9,9 @@ export class Composer {
     @Field()
     name: string;
 
+    @Field()
+    nickname: string;
+
     @Field(type => Int)
     birthYear: number;
 

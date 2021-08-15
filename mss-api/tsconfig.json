@@ -7,11 +7,10 @@
     "sourceMap": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
-    "jsx": "react",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": ["es2018", "esnext.asynciterable", "dom"],
-    "skipLibCheck": true
+    "lib": ["es2018", "esnext.asynciterable"],
+    "outDir": "./public/"
   },
-  "include": ["client/**/*"]
+  "include": ["./**/*"]
 }

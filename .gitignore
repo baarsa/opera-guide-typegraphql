@@ -1,5 +1,7 @@
-/node_modules
 /.idea
-/dist
 /coverage
-.eslintcache
+mss-api/node_modules
+mss-api/public
+mss-front/node_modules
+mss-front/public
+mss-front/.eslintcache
