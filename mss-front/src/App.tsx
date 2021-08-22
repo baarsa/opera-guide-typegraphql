@@ -7,6 +7,7 @@ import {Operas} from "./pages/operas/operas";
 import {Navigation} from "./components/navigation/navigation";
 import styled from "styled-components";
 import {StyledBlock} from "./components/styled-block/styled-block";
+import { Login } from "./pages/login/login";
 
 const navigationItems = [
     {
@@ -51,6 +52,7 @@ export const App = () => {
                 <Content>
                     <Switch>
                         <Route path='/operas' component={Operas}/>
+                        <Route path='/login' component={Login}/>
                         <Redirect to='/operas'/>
                     </Switch>
                 </Content>
