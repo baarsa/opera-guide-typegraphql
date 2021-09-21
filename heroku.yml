@@ -1,4 +1,4 @@
 build:
   docker:
     api: mss-api/Dockerfile
-    front: mss-front/Dockerfile
+    web: mss-front/Dockerfile
