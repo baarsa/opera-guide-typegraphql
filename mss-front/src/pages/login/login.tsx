@@ -1,6 +1,8 @@
 import React, { FormEventHandler, useState } from "react";
 import { tokenManager } from "../../token-manager";
 import { appHistory } from "../../history";
+import { getUserInfo, loginApi } from "../../auth-api";
+import { userInfoVar } from "../../apollo-client-setup";
 
 // todo add switch to sign up.
 export const Login = () => {
@@ -13,25 +15,17 @@ export const Login = () => {
       return;
     }
     // send
-    fetch('http://localhost:4001/auth/login', { // todo set link from env!
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ login, password }),
-    }).then(res => {
-      if (res.status !== 200) {
-          alert('Incorrect values'); //todo make notifications
-        // todo rewrite in async (fix regeneratorRuntime is not defined)
-      }
-      return res.json();
-    })
+    loginApi({ login, password })
       .then(res => {
-        tokenManager.setTokens({ token: res.token, refreshToken: res.refreshToken });
+      tokenManager.setTokens({ token: res.token, refreshToken: res.refreshToken });
+      return getUserInfo();
+    })
+      .then((res) => {
+        userInfoVar(res);
         appHistory.push('/');
       })
       .catch(e => {
-        alert('Network error');
+        alert('network error');
       });
   };
   return <form onSubmit={ onSubmit }>

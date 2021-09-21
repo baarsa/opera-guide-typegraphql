@@ -1,3 +1,6 @@
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
 import 'reflect-metadata';
 import { ApolloServer } from "apollo-server";
 import { buildSchema } from 'type-graphql';
@@ -6,7 +9,6 @@ import {ComposerResolver} from "./resolvers/ComposerResolver";
 import {startPublishing} from "./performancePublisher";
 import {PerformanceResolver} from "./resolvers/PerformanceResolver";
 
-const path = require('path');
 const PORT = process.env.PORT || 4000;
 
 // do we need express at all?
@@ -17,6 +19,7 @@ const PORT = process.env.PORT || 4000;
         const server = new ApolloServer({
             schema,
         });
+        console.log(`listening on ports: ${PORT}`);
         await server.listen({ port: PORT, url: '/graphql' });
     }
     startApolloServer();

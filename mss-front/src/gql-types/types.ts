@@ -18,7 +18,7 @@ export type Composer = {
   __typename?: 'Composer';
   id: Scalars['ID'];
   name: Scalars['String'];
-  nicknameQQ: Scalars['String'];
+  nickname: Scalars['String'];
   birthYear: Scalars['Int'];
   operas: Array<Opera>;
 };

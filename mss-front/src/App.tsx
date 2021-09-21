@@ -8,6 +8,8 @@ import {Navigation} from "./components/navigation/navigation";
 import styled from "styled-components";
 import {StyledBlock} from "./components/styled-block/styled-block";
 import { Login } from "./pages/login/login";
+import { userInfoVar } from "./apollo-client-setup";
+import { useReactiveVar } from '@apollo/react-hooks';
 
 const navigationItems = [
     {
@@ -19,6 +21,7 @@ const navigationItems = [
         text: 'Add Opera',
         link: '/operas/create',
         isActive: false,
+        needRole: 'contributor',
     },
 ];
 
@@ -40,7 +43,10 @@ const Content = styled(StyledBlock)`
 
 export const App = () => {
     const location = useLocation();
-    const actualNavigationItems = navigationItems.map(item => ({
+    const userInfo = useReactiveVar(userInfoVar);
+    const actualNavigationItems = navigationItems
+      .filter(item => item.needRole === undefined || (userInfo !== null && item.needRole === userInfo.role))
+      .map(item => ({
         ...item,
         isActive: location.pathname === item.link,
     }));

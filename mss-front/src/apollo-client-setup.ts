@@ -3,6 +3,7 @@ import {
     InMemoryCache,
     createHttpLink,
     split,
+  makeVar,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { WebSocketLink } from '@apollo/client/link/ws';
@@ -11,9 +12,10 @@ import { onError } from '@apollo/client/link/error';
 import { fromPromise, from } from 'apollo-link';
 import { appHistory } from "./history";
 import { tokenManager } from "./token-manager";
+import { getNewTokens } from './auth-api';
 
-const graphqlHttpUri = process.env.GRAPHQL_HTTP_URI || 'http://localhost:4001/graphql';
-const graphqlWsUri = process.env.GRAPHQL_WS_URI || 'ws://localhost:4000/graphql';
+const graphqlHttpUri = process.env.GRAPHQL_HTTP_URI || 'http://localhost:8080/api/graphql';
+const graphqlWsUri = process.env.GRAPHQL_WS_URI || 'ws://localhost:8080/api/graphql';
 
 const cache = new InMemoryCache();
 const httpLink = createHttpLink({
@@ -49,20 +51,6 @@ const authLink = setContext((_, { headers }) => {
     }
 });
 
-const getNewTokens = () => {
-  const refreshToken = tokenManager.getRefreshToken();
-  return fetch('http://localhost:4001/auth/refresh', { // todo set link from env!
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ refreshToken }),
-  }).then(res => {
-    if (res.status !== 200) throw new Error();
-    return res.json();
-  });
-};
-
 const errorLink = onError(
   ({ networkError, operation, forward }) => {
       if (networkError !== undefined && networkError.statusCode === 401) {
@@ -89,6 +77,15 @@ const errorLink = onError(
       }
   }
 );
+
+type UserRole = 'admin' | 'viewer' | 'contributor';
+
+type UserInfo = {
+  name: string;
+  role: UserRole;
+}
+
+export const userInfoVar = makeVar<UserInfo | null>(null);
 
 export const client = new ApolloClient({
     cache,

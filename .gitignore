@@ -2,6 +2,8 @@
 /coverage
 mss-api/node_modules
 mss-api/public
+mss-api/.env
 mss-front/node_modules
 mss-front/public
 mss-front/.eslintcache
+mss-front/.env
