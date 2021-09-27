@@ -19,7 +19,7 @@ module.exports = {
                 </html>
               `
         }),
-        new webpack.EnvironmentPlugin(['GRAPHQL_HTTP_URI', 'GRAPHQL_WS_URI']),
+        new webpack.EnvironmentPlugin(['GRAPHQL_HTTP_URI', 'GRAPHQL_WS_URI', 'AUTH_URI']),
     ],
     module: {
         rules: [

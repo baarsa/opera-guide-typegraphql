@@ -1,9 +1,9 @@
 import { tokenManager } from "./token-manager";
 
-const AUTH_API_URL = process.env.AUTH_API_URL || 'http://localhost:8080/auth';
+const AUTH_URI = process.env.AUTH_URI || 'http://localhost:8080/auth';
 
 export const loginApi = ({ login, password }: { login: string; password: string }) => {
-  return fetch(`${AUTH_API_URL}/login`, {
+  return fetch(`${AUTH_URI}/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -23,7 +23,7 @@ export const getUserInfo = () => {
   if (token === null) {
     throw new Error();
   }
-  return fetch(`${AUTH_API_URL}/user`, {
+  return fetch(`${AUTH_URI}/user`, {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -36,7 +36,7 @@ export const getUserInfo = () => {
 
 export const getNewTokens = () => {
   const refreshToken = tokenManager.getRefreshToken();
-  return fetch(`${AUTH_API_URL}/refresh`, {
+  return fetch(`${AUTH_URI}/refresh`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

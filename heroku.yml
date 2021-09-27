@@ -2,3 +2,7 @@ build:
   docker:
     api: mss-api/Dockerfile
     web: mss-front/Dockerfile
+  config:
+    GRAPHQL_HTTP_URI_ARG=https://mss--egateway.herokuapp.com/api/graphql
+    GRAPHQL_WS_URI_ARG=ws://mss--egateway.herokuapp.com/api/graphql
+    AUTH_URI_ARG=https://mss--egateway.herokuapp.com/auth
