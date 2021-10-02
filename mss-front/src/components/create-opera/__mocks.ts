@@ -31,7 +31,11 @@ export const mocks = [{
     result: {
       data: {
         addOpera: {
+          id: '1',
           name: createdOperaData.name,
+          author: {
+            name: 'Wagner',
+          }
         },
       },
     },
