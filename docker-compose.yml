@@ -1,0 +1,13 @@
+services:
+  api:
+    environment:
+      - PORT=17001
+    build: ./mss-api
+    ports:
+      - "17001:17001"
+  front:
+    environment:
+      - PORT=17003
+    build: ./mss-front
+    ports:
+      - "17003:17003"
