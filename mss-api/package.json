@@ -9,7 +9,8 @@
     "generate-watch": "graphql-codegen --watch",
     "start-dev": "concurrently \"npm run start-server\" \"npm run generate-watch\"",
     "build": "tsc --project tsconfig.json",
-    "start": "cross-env NODE_ENV=production node public/index.js"
+    "start": "cross-env NODE_ENV=production node public/index.js",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -27,7 +28,6 @@
     "concurrently": "^5.3.0",
     "cross-env": "^7.0.2",
     "dotenv": "^10.0.0",
-    "express": "4.17.1",
     "graphql": "^15.3.0",
     "graphql-subscriptions": "^1.1.0",
     "graphql-tag": "^2.11.0",

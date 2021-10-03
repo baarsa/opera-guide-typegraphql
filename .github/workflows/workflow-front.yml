@@ -1,4 +1,4 @@
-name: workflow
+name: workflow-front
 on: [push]
 jobs:
   build:

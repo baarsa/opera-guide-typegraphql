@@ -12,7 +12,7 @@ module.exports = {
         "\\.css$": "<rootDir>/__mocks__/styleMock.js",
     },
     "collectCoverageFrom": [
-        "<rootDir>/client/**/*.{ts,tsx}",
+        "<rootDir>/src/**/*.{ts,tsx}",
         "!**/types.ts",
         "!**/apollo-client-setup.ts",
     ]
