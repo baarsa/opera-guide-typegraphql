@@ -13,7 +13,6 @@ export const PerformanceSubscriber: FC = () => {
             const message = `Prepare for an upcoming performance of ${ opera.name } in ${location} on ${date}!\n
              Cast includes ${performers.map(({ name }) => name).join(', ')}.`;
             store.addNotification({
-                title: name,
                 container: 'top-right',
                 message, type: 'info',
                 animationIn: ["animate__animated", "animate__fadeIn"],

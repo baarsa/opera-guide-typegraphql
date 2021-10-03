@@ -4,15 +4,18 @@ import {
     createHttpLink,
     split,
   makeVar,
+  from,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { onError } from '@apollo/client/link/error';
-import { fromPromise, from } from 'apollo-link';
+import { fromPromise } from '@apollo/client/link/utils';
 import { appHistory } from "./history";
 import { tokenManager } from "./token-manager";
 import { getNewTokens } from './auth-api';
+import { ServerError } from "@apollo/react-hooks";
+import fetch from 'cross-fetch';
 
 const graphqlHttpUri = process.env.GRAPHQL_HTTP_URI || 'http://localhost:8080/api/graphql';
 const graphqlWsUri = process.env.GRAPHQL_WS_URI || 'ws://localhost:8080/api/graphql';
@@ -20,6 +23,7 @@ const graphqlWsUri = process.env.GRAPHQL_WS_URI || 'ws://localhost:8080/api/grap
 const cache = new InMemoryCache();
 const httpLink = createHttpLink({
     uri: graphqlHttpUri,
+    fetch,
 });
 
 const wsLink = new WebSocketLink({
@@ -53,7 +57,7 @@ const authLink = setContext((_, { headers }) => {
 
 const errorLink = onError(
   ({ networkError, operation, forward }) => {
-      if (networkError !== undefined && networkError.statusCode === 401) {
+      if (networkError !== undefined && (networkError as ServerError).statusCode === 401) {
         return fromPromise(
           getNewTokens()
             .then(({ token, refreshToken }) => {
