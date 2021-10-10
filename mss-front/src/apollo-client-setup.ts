@@ -17,7 +17,7 @@ import { getNewTokens } from './auth-api';
 import { ServerError } from "@apollo/react-hooks";
 import fetch from 'cross-fetch';
 
-const graphqlHttpUri = process.env.GRAPHQL_HTTP_URI || 'http://localhost:8080/api/graphql';
+const graphqlHttpUri = process.env.GRAPHQL_HTTP_URI || '/api/graphql';
 const graphqlWsUri = process.env.GRAPHQL_WS_URI || 'ws://localhost:8080/api/graphql';
 
 const cache = new InMemoryCache();

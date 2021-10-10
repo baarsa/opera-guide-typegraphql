@@ -1,5 +1,6 @@
 /.idea
 /coverage
+kube.yml
 mss-api/node_modules
 mss-api/public
 mss-api/.env

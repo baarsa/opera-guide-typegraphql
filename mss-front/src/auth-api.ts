@@ -1,6 +1,6 @@
 import { tokenManager } from "./token-manager";
 
-const AUTH_URI = process.env.AUTH_URI || 'http://localhost:8080/auth';
+const AUTH_URI = process.env.AUTH_URI || '/auth';
 
 export const loginApi = ({ login, password }: { login: string; password: string }) => {
   return fetch(`${AUTH_URI}/login`, {
