@@ -28,7 +28,7 @@ const CreateOperaWrapped = () => {
     );
 };
 
-export const Operas = () => {
+const Operas = () => {
     const match = useRouteMatch();
     const userInfo = useReactiveVar(userInfoVar);
     return (
@@ -44,3 +44,5 @@ export const Operas = () => {
         </Switch>
     );
 };
+
+export default Operas;

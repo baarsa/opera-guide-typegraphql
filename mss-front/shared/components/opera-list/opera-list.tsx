@@ -21,6 +21,7 @@ export const OperaList = () => {
     return <div>Loading...</div>;
   }
   if (error || data === undefined) {
+    console.log(JSON.stringify(error));
     return <div>Error!</div>;
   }
   return (

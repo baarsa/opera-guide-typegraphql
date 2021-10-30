@@ -1,15 +1,16 @@
 import * as React from 'react';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import ReactNotification from 'react-notifications-component';
-import 'react-notifications-component/dist/theme.css';
+// import 'react-notifications-component/dist/theme.css'; //todo fix
 import {PerformanceSubscriber} from "./components/performance-subscriber/performance-subscriber";
-import {Operas} from "./pages/operas/operas";
 import {Navigation} from "./components/navigation/navigation";
 import styled from "styled-components";
 import {StyledBlock} from "./components/styled-block/styled-block";
 import { Login } from "./pages/login/login";
 import { userInfoVar } from "./apollo-client-setup";
 import { useReactiveVar } from '@apollo/react-hooks';
+import loadable from '@loadable/component'
+import Operas from './pages/operas/operas';
 
 const navigationItems = [
     {
@@ -41,6 +42,8 @@ const Content = styled(StyledBlock)`
   font-size: 24px;
 `;
 
+//const LOperas = loadable(() => import('./pages/operas/operas'));
+
 export const App = () => {
     const location = useLocation();
     const userInfo = useReactiveVar(userInfoVar);
@@ -53,11 +56,11 @@ export const App = () => {
         return (
             <AppContainer>
             <ReactNotification/>
-            <PerformanceSubscriber/>
+                {/* <PerformanceSubscriber/> */}
                 <Navigation items={ actualNavigationItems }/>
                 <Content>
                     <Switch>
-                        <Route path='/operas' component={Operas}/>
+                        <Route path='/operas' component={ Operas }/>
                         <Route path='/login' component={Login}/>
                         <Redirect to='/operas'/>
                     </Switch>

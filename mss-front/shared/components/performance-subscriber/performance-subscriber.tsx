@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {usePerformanceSubscriptionSubscription} from "../../gql-types/types";
 import { store } from 'react-notifications-component';
-import 'animate.css';
+// import 'animate.css'; todo fix
 
 export const PerformanceSubscriber: FC = () => {
     usePerformanceSubscriptionSubscription({
