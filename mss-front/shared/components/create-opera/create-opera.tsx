@@ -49,7 +49,7 @@ const Column = styled.div`
 `;
 
 const CreateOpera = ({
-  onCreationSuccess = () => {},
+  onCreationSuccess = () => { /* noop */ },
 }: CreateOperaProps) => {
   const [name, setName] = useState("");
   const [year, setYear] = useState(INIT_YEAR_VALUE);
@@ -86,7 +86,7 @@ const CreateOpera = ({
       }
       cache.modify({
         fields: {
-          operas(prevOperas) {
+          operas(prevOperas: (typeof data.addOpera)[]) {
             return [...prevOperas, data.addOpera];
           },
         },

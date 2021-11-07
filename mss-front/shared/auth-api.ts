@@ -3,6 +3,7 @@ import { isServer } from "./is-server";
 import { appHistory } from "./history";
 import { serverFetch } from "../server/serverFetch";
 import crossFetch from 'cross-fetch';
+import { UserInfo } from "./apollo-client-setup";
 
 const fetch = isServer() ? serverFetch.fetch : crossFetch;
 
@@ -10,7 +11,17 @@ const getAUTH_URI = () => isServer()
   ? process.env.SERVER_AUTH_URI || '/auth'
   : process.env.AUTH_URI || '/auth'
 
-export const loginApi = async ({ login, password }: { login: string; password: string }) => {
+
+type Credentials = {
+  login: string;
+  password: string;
+}
+
+type AuthResponse = {
+  token: string;
+}
+
+export const loginApi = async ({ login, password }: Credentials) => {
   const res = await fetch(`${getAUTH_URI()}/login`, {
     method: 'POST',
     headers: {
@@ -22,10 +33,10 @@ export const loginApi = async ({ login, password }: { login: string; password: s
   if (res.status !== 200) {
     throw Error();
   }
-  return res.json();
+  return res.json() as Promise<AuthResponse>;
 }
 
-export const signupApi = ({ login, password }: { login: string; password: string }) => {
+export const signupApi = ({ login, password }: Credentials) => {
   return fetch(`${getAUTH_URI()}/signup`, {
     method: 'POST',
     headers: {
@@ -37,17 +48,11 @@ export const signupApi = ({ login, password }: { login: string; password: string
     if (res.status !== 200) {
       alert('Incorrect values'); //todo make notifications (handle errors in client code)
     }
-    return res.json();
+    return res.json() as Promise<AuthResponse>;
   });
 };
 
-export const getUserInfo = async () => {
-  const token = tokenManager.getToken();
-  if (token === null) {
-    const tokenResponse = await getNewTokens();
-    const { token } = await tokenResponse.json();
-    tokenManager.setToken(token);
-  }
+const fetchUserInfo = async (token: string) => {
   const response = await fetch(`${getAUTH_URI()}/user`, {
     method: 'GET',
     headers: {
@@ -55,32 +60,43 @@ export const getUserInfo = async () => {
     },
   });
   if (response.status === 401) {
-      const tokenResponse = await getNewTokens();
-      const { token } = await tokenResponse.json();
-      tokenManager.setToken(token);
-      return getUserInfo();
+    return 'Unauthorized';
   }
   if (response.status !== 200) {
     throw new Error();
   }
-  return response.json();
+  return response.json() as Promise<UserInfo>;
+}
+
+export const getUserInfo = async () => {
+  let token = tokenManager.getToken();
+  if (token === null) {
+    const tokenResponse = await getNewTokens();
+    token = tokenResponse.token;
+    tokenManager.setToken(token);
+  }
+  const response = await fetchUserInfo(token);
+  if (response === 'Unauthorized') {
+      const tokenResponse = await getNewTokens();
+      const { token } = tokenResponse;
+      tokenManager.setToken(token);
+      return fetchUserInfo(token);
+  }
+  return response;
 };
 
-export const getNewTokens = () => {
+export const getNewTokens = async () => {
   console.log('fetching new tokens...', `${getAUTH_URI()}/refresh`);
-  return fetch(`${getAUTH_URI()}/refresh`, {
+  const fetchResult = await fetch(`${getAUTH_URI()}/refresh`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     credentials: 'include',
-  }).then(res => {
-    console.log(`got auth response: ${JSON.stringify(res)}`);
-    if (res.status !== 200) throw new Error();
-    return res.json();
-  }).catch(e => {
-    console.log(`got auth error: ${e.message}`);
-  })
+  });
+  console.log(`got auth response: ${JSON.stringify(fetchResult)}`);
+  if (fetchResult.status !== 200) throw new Error();
+  return fetchResult.json() as Promise<AuthResponse>;
 };
 
 export const logout = async () => {
