@@ -49,7 +49,7 @@ const httpLink = createHttpLink({
 //     httpLink,
 // );
 
-const authLink = setContext((_, { headers }) => {
+const authLink = setContext((_, { headers }: { headers: Record<string, string> }) => {
     const token = tokenManager.getToken();
     return {
         headers: {
@@ -62,7 +62,6 @@ const authLink = setContext((_, { headers }) => {
 const errorLink = onError(
   ({ networkError, operation, forward }) => {
       if (networkError !== undefined && (networkError as ServerError).statusCode === 401) {
-        // @ts-ignore
         return fromPromise(
           getNewTokens()
             .then(({ token }) => {
@@ -91,7 +90,7 @@ const errorLink = onError(
 
 type UserRole = 'admin' | 'viewer' | 'contributor';
 
-type UserInfo = {
+export type UserInfo = {
   name: string;
   role: UserRole;
 }

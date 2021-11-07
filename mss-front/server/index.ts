@@ -1,10 +1,13 @@
 import path from "path";
 
-require('dotenv').config()
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 import "regenerator-runtime/runtime";
 import 'cross-fetch/polyfill';
 import express from 'express';
-const cookieParser = require("cookie-parser");
+import cookieParser from 'cookie-parser';
+import asyncHandler from "express-async-handler"
 import { response } from "./response";
 
 process.env.IS_SERVER = 'true';
@@ -22,7 +25,7 @@ console.log(`dirname: ${__dirname}`);
 app.use(express.static(path.join(__dirname, '../..'))); //todo fix dirname
 console.log(__dirname);
 
-app.get('*', response);
+app.get('*', asyncHandler(response));
 
 app.listen(port);
-console.log("server started on port " + port);
+console.log(`server started on port ${port}`);
