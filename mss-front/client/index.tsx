@@ -9,7 +9,7 @@ import { Router } from "react-router-dom";
 import { appHistory } from "../shared/history";
 import { loadableReady } from '@loadable/component'
 
-loadableReady(() => {
+void loadableReady(() => {
   const root = document.getElementById('main');
   hydrate(<ApolloProvider client={client}>
     <Router history={appHistory}>

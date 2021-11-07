@@ -1,5 +1,5 @@
 export const tokenManager = (() => {
-    let _token = null;
+    let _token: string | null = null;
     return ({
       setToken: (token: string) => {
         _token = token;

@@ -106,7 +106,7 @@ const CreateOpera = ({
       autoComplete="off"
       onSubmit={(e) => {
         e.preventDefault();
-        addOpera({
+        void addOpera({
           variables: {
             operaData: {
               name,
