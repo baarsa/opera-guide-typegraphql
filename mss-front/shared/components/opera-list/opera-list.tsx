@@ -15,7 +15,7 @@ const Ul = styled.ul`
   margin: 0;
 `;
 
-export const OperaList = () => {
+const OperaList = () => {
   const { loading, data, error } = useGetAllOperasQuery();
   if (loading) {
     return <div>Loading...</div>;
@@ -34,3 +34,5 @@ export const OperaList = () => {
     </Ul>
   );
 };
+
+export default OperaList;

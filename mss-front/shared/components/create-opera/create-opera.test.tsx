@@ -2,7 +2,7 @@ import React from 'react';
 import {render, waitFor} from "@testing-library/react";
 import '@testing-library/jest-dom'
 import userEvent from '@testing-library/user-event'
-import {CreateOpera, CreateOperaProps} from "./create-opera";
+import CreateOpera, { CreateOperaProps } from "./create-opera";
 import {MockedProvider} from "@apollo/client/testing";
 import {VoiceType} from "../../gql-types/types";
 import { createdOperaData, mocks } from "./__mocks";

@@ -1,11 +1,13 @@
 import React from 'react';
 import {Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
-import {OperaList} from "../../components/opera-list/opera-list";
-import {OperaCard} from "../../components/opera-card/opera-card";
-import {CreateOpera} from "../../components/create-opera/create-opera";
 import {store} from "react-notifications-component";
 import { useReactiveVar } from '@apollo/react-hooks';
 import { userInfoVar } from "../../apollo-client-setup";
+import loadable from "@loadable/component";
+
+const OperaList = loadable(() => import('../../components/opera-list/opera-list'));
+const CreateOpera = loadable(() => import('../../components/create-opera/create-opera'));
+const OperaCard = loadable(() => import('../../components/opera-card/opera-card'));
 
 const CreateOperaWrapped = () => {
   // todo check redirect

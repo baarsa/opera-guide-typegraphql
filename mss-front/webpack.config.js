@@ -2,7 +2,11 @@ require('dotenv').config()
 const path = require('path')
 const nodeExternals = require('webpack-node-externals')
 const LoadablePlugin = require('@loadable/webpack-plugin')
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const webpack = require("webpack");
+const {
+  createLoadableComponentsTransformer,
+} = require('typescript-loadable-components-plugin')
 
 const DIST_PATH = path.resolve(__dirname, 'dist')
 const production = process.env.NODE_ENV === 'production'
@@ -25,12 +29,22 @@ const getConfig = target => ({
       {
         test: /\.tsx?$/,
         exclude: /node_modules/,
-        use: {
+        use: [
+          {
           loader: 'babel-loader',
           options: {
             caller: { target },
           },
         },
+          {
+            loader: 'ts-loader',
+            options: {
+              getCustomTransformers: (program) => ({
+                before: [createLoadableComponentsTransformer(program, {})],
+              }),
+            },
+          },
+        ],
       },
       {
         test: /\.css$/,
@@ -57,6 +71,7 @@ const getConfig = target => ({
       "process.env.GRAPHQL_WS_URI": JSON.stringify(process.env.GRAPHQL_WS_URI),
       "process.env.AUTH_URI": JSON.stringify(process.env.AUTH_URI)
     }),
+    ...(development && target === 'web' ? [new BundleAnalyzerPlugin()] : []),
   ],
 })
 

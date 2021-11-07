@@ -1,5 +1,5 @@
 import React from 'react';
-import {Navigation} from "./navigation";
+import Navigation from "./navigation";
 import {render} from "@testing-library/react";
 import { MemoryRouter } from 'react-router-dom';
 

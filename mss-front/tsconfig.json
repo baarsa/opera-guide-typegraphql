@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "esnext",
+    "jsx": "react",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "incremental": true,
+    "outDir": "lib",
+    "sourceMap": true
+  },
+  "include": ["client/**/*", "server/**/*", "shared/**/*"]
+}

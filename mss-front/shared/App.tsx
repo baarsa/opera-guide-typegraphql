@@ -3,14 +3,14 @@ import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import ReactNotification from 'react-notifications-component';
 // import 'react-notifications-component/dist/theme.css'; //todo fix
 import {PerformanceSubscriber} from "./components/performance-subscriber/performance-subscriber";
-import {Navigation} from "./components/navigation/navigation";
 import styled from "styled-components";
 import {StyledBlock} from "./components/styled-block/styled-block";
-import { Login } from "./pages/login/login";
 import { userInfoVar } from "./apollo-client-setup";
 import { useReactiveVar } from '@apollo/react-hooks';
 import loadable from '@loadable/component'
-import Operas from './pages/operas/operas';
+import { useEffect } from "react";
+import { getUserInfo } from "./auth-api";
+import { UserInfo } from "./components/user-info/user-info";
 
 const navigationItems = [
     {
@@ -42,11 +42,28 @@ const Content = styled(StyledBlock)`
   font-size: 24px;
 `;
 
-//const LOperas = loadable(() => import('./pages/operas/operas'));
+const Navigation = loadable(() => import('./components/navigation/navigation'));
+const Operas = loadable(() => import('./pages/operas/operas'));
+const Login = loadable(() => import('./pages/login/login'));
 
 export const App = () => {
     const location = useLocation();
     const userInfo = useReactiveVar(userInfoVar);
+    /*
+    useEffect(() => {
+        async function setUserInfo() {
+            console.log('effect set info');
+            const userInfo = await getUserInfo();
+            // todo add refresh
+            userInfoVar(userInfo);
+        }
+        if (userInfoVar() === null) {
+            console.log('effect set info');
+            setUserInfo()
+        };
+    }, [])
+
+     */
     const actualNavigationItems = navigationItems
       .filter(item => item.needRole === undefined || (userInfo !== null && item.needRole === userInfo.role))
       .map(item => ({
@@ -57,11 +74,12 @@ export const App = () => {
             <AppContainer>
             <ReactNotification/>
                 {/* <PerformanceSubscriber/> */}
+                { /* userInfo !== null && <UserInfo username={userInfo.name} />  */}
                 <Navigation items={ actualNavigationItems }/>
                 <Content>
                     <Switch>
                         <Route path='/operas' component={ Operas }/>
-                        <Route path='/login' component={Login}/>
+                        <Route path='/login' component={ Login }/>
                         <Redirect to='/operas'/>
                     </Switch>
                 </Content>

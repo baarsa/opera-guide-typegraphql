@@ -1,7 +1,7 @@
 import React from 'react';
 import {MockedProvider} from '@apollo/client/testing';
 import {render, waitFor} from '@testing-library/react';
-import {OperaCard} from "./opera-card";
+import OperaCard from "./opera-card";
 import userEvent from "@testing-library/user-event";
 import { authorName, characters, mocks, operaName } from "./__mocks";
 

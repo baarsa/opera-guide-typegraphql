@@ -1,7 +1,7 @@
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 import * as React from 'react';
-import { hydrate, render } from "react-dom";
+import { hydrate } from "react-dom";
 import { App } from "../shared/App";
 import { client } from "../shared/apollo-client-setup";
 import {ApolloProvider} from "@apollo/react-hooks";

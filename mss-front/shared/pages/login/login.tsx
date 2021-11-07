@@ -1,13 +1,15 @@
 import React, { FormEventHandler, useState } from "react";
 import { tokenManager } from "../../token-manager";
 import { appHistory } from "../../history";
-import { getUserInfo, loginApi, loginApi2, signupApi } from "../../auth-api";
+import { getUserInfo, loginApi, signupApi } from "../../auth-api";
 import { userInfoVar } from "../../apollo-client-setup";
 import { store } from "react-notifications-component";
+import { Input } from "../../components/input/input";
+import { Button } from "../../components/button/button";
 
 // todo styles
 
-export const Login = () => {
+const Login = () => {
   const [isSignup, setIsSignup] = useState(false);
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
@@ -26,13 +28,13 @@ export const Login = () => {
       });
       return;
     }
-    const api = isSignup ? signupApi : loginApi2;
+    const api = isSignup ? signupApi : loginApi;
     // send
     try {
       const res = await api({ login, password });
-      tokenManager.setTokens({ token: res.token, refreshToken: res.refreshToken });
+      tokenManager.setToken(res.token);
       const userInfo = await getUserInfo();
-      userInfoVar(res);
+      userInfoVar(userInfo);
       appHistory.push('/');
     } catch (e) {
       //todo network error or 401 ??
@@ -47,27 +49,14 @@ export const Login = () => {
         },
       });
     }
-    /*
-    api({ login, password })
-      .then(res => {
-      tokenManager.setTokens({ token: res.token, refreshToken: res.refreshToken });
-      return getUserInfo();
-    })
-      .then((res) => {
-        userInfoVar(res);
-        appHistory.push('/');
-      })
-      .catch(e => {
-        alert('network error');
-      });
-
-     */
   };
   return <form onSubmit={ onSubmit }>
-    <div onClick={() => setIsSignup(false)}>Log in</div>
-    <div onClick={() => setIsSignup(true)}>Sign up</div>
-    <input name='login' placeholder='Enter login...' value={login} onChange={e => setLogin(e.target.value)} />
-    <input name='password' placeholder='Enter password...' value={password} onChange={e => setPassword(e.target.value)} />
-    <button type='submit'>Submit</button>
+    <div onClick={() => setIsSignup(false)} style={{ display: isSignup ? 'none' : 'block' }}>Log in</div>
+    <div onClick={() => setIsSignup(true)} style={{ display: isSignup ? 'block' : 'none' }}>Sign up</div>
+    <Input name='login' placeholder='Enter login...' value={login} onChange={e => setLogin(e.target.value)} />
+    <Input name='password' placeholder='Enter password...' value={password} onChange={e => setPassword(e.target.value)} />
+    <Button type='submit'>Submit</Button>
   </form>;
 };
+
+export default Login;

@@ -9,6 +9,7 @@ import express from "express";
 import { tokenManager } from "../shared/token-manager";
 import { App } from "../shared/App";
 import { ServerStyleSheet } from 'styled-components'
+import { serverFetch } from "./serverFetch";
 
 const nodeStats = path.resolve(
   __dirname,
@@ -21,35 +22,36 @@ const webStats = path.resolve(
 )
 
 export const response = async function (req: express.Request, res: express.Response) {
-  tokenManager.setTokens({
-    token: req.cookies.token,
-    refreshToken: req.cookies.refreshToken,
-  });
-  const nodeExtractor = new ChunkExtractor({ statsFile: nodeStats })
-  //const { default: App } = nodeExtractor.requireEntrypoint()
+  const context = { url: req.url };
+  serverFetch.setCookies(req.cookies);
   const sheet = new ServerStyleSheet();
   const webExtractor = new ChunkExtractor({ statsFile: webStats })
   const jsx = webExtractor.collectChunks(<ApolloProvider client={client}>
-    <StaticRouter location={req.url} context={{}}>
+    <StaticRouter location={req.url} context={context}>
       <App />
     </StaticRouter>
   </ApolloProvider>)
   const html = await renderToStringWithData(sheet.collectStyles(jsx));
   const styleTags = sheet.getStyleTags()
-  sheet.seal()
-  console.log('after render');
+  sheet.seal();
   res.set('content-type', 'text/html')
-  res.cookie('token', tokenManager.getToken());
-  res.cookie('refreshToken', tokenManager.getRefreshToken());
+  res.header['set-cookie'] = serverFetch.getCookies().forEach(function(cookieItem) {
+    const { name, value, ...options} = cookieItem;
+    res.cookie(cookieItem.name, cookieItem.value, options);
+  });
+  if (context.url !== req.url) {
+    res.redirect(302, context.url);
+    return;
+  }
   res.send(`
       <!DOCTYPE html>
-      <html>
+      <html style="height: 100%">
         <head>        
         ${webExtractor.getStyleTags()}
         ${ styleTags }
         </head>
-        <body>
-          <div id="main">${html}</div>
+        <body style="height: 100%">
+          <div id="main" style="height: 100%">${html}</div>
           ${webExtractor.getScriptTags()}
         </body>
       </html>

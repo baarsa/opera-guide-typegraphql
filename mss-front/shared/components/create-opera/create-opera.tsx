@@ -8,6 +8,8 @@ import {
 import styled from "styled-components";
 import { RoleItem } from "./role-item";
 import { Button } from "../button/button";
+import { Label } from "../label/label";
+import { Input } from "../input/input";
 
 export type CreateOperaProps = {
   onCreationSuccess?: (name: string) => void;
@@ -24,25 +26,6 @@ const Form = styled.form`
 
 const Item = styled.div`
   margin: 10px 0;
-`;
-
-const Label = styled.label`
-  display: block;
-  font-weight: bold;
-  color: white;
-  padding-top: 0;
-  padding-left: 0;
-  line-height: 1.25;
-`;
-
-const Input = styled.input`
-  background: #222;
-  font: inherit;
-  color: inherit;
-  line-height: normal;
-  border: none;
-  outline: none;
-  width: 100%;
 `;
 
 const Select = styled.select`
@@ -65,7 +48,7 @@ const Column = styled.div`
   width: 45%;
 `;
 
-export const CreateOpera = ({
+const CreateOpera = ({
   onCreationSuccess = () => {},
 }: CreateOperaProps) => {
   const [name, setName] = useState("");
@@ -231,3 +214,5 @@ export const CreateOpera = ({
     </Form>
   );
 };
+
+export default CreateOpera;

@@ -28,7 +28,7 @@ const ToggleRolesButton = styled(Button)`
 `;
 
 
-export const OperaCard = ({ operaId }: Props) => {
+const OperaCard = ({ operaId }: Props) => {
   const { loading, error, data } = useGetOperaQuery({
     variables: { id: operaId },
   });
@@ -76,3 +76,5 @@ export const OperaCard = ({ operaId }: Props) => {
     </article>
   );
 };
+
+export default OperaCard;

@@ -1,33 +1,23 @@
 import { tokenManager } from "./token-manager";
 import { isServer } from "./is-server";
+import { appHistory } from "./history";
+import { serverFetch } from "../server/serverFetch";
+import crossFetch from 'cross-fetch';
+
+const fetch = isServer() ? serverFetch.fetch : crossFetch;
 
 const getAUTH_URI = () => isServer()
   ? process.env.SERVER_AUTH_URI || '/auth'
   : process.env.AUTH_URI || '/auth'
 
-export const loginApi = ({ login, password }: { login: string; password: string }) => {
-  return fetch(`${getAUTH_URI()}/login`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ login, password }),
-  }).then(res => {
-    if (res.status !== 200) {
-      alert('Incorrect values'); //todo make notifications (handle errors in client code)
-      // todo rewrite in async (fix regeneratorRuntime is not defined)
-    }
-    return res.json();
-  });
-};
-
-export const loginApi2 = async ({ login, password }: { login: string; password: string }) => {
+export const loginApi = async ({ login, password }: { login: string; password: string }) => {
   const res = await fetch(`${getAUTH_URI()}/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ login, password }),
+    credentials: 'include',
   });
   if (res.status !== 200) {
     throw Error();
@@ -42,40 +32,48 @@ export const signupApi = ({ login, password }: { login: string; password: string
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ login, password }),
+    credentials: 'include',
   }).then(res => {
     if (res.status !== 200) {
       alert('Incorrect values'); //todo make notifications (handle errors in client code)
-      // todo rewrite in async (fix regeneratorRuntime is not defined)
     }
     return res.json();
   });
 };
 
-export const getUserInfo = () => {
+export const getUserInfo = async () => {
   const token = tokenManager.getToken();
   if (token === null) {
-    throw new Error();
+    const tokenResponse = await getNewTokens();
+    const { token } = await tokenResponse.json();
+    tokenManager.setToken(token);
   }
-  return fetch(`${getAUTH_URI()}/user`, {
+  const response = await fetch(`${getAUTH_URI()}/user`, {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${token}`,
     },
-  }).then(res => {
-    if (res.status !== 200) throw new Error();
-    return res.json();
   });
+  if (response.status === 401) {
+      const tokenResponse = await getNewTokens();
+      const { token } = await tokenResponse.json();
+      tokenManager.setToken(token);
+      return getUserInfo();
+  }
+  if (response.status !== 200) {
+    throw new Error();
+  }
+  return response.json();
 };
 
 export const getNewTokens = () => {
-  const refreshToken = tokenManager.getRefreshToken();
   console.log('fetching new tokens...', `${getAUTH_URI()}/refresh`);
   return fetch(`${getAUTH_URI()}/refresh`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ refreshToken }),
+    credentials: 'include',
   }).then(res => {
     console.log(`got auth response: ${JSON.stringify(res)}`);
     if (res.status !== 200) throw new Error();
@@ -84,3 +82,18 @@ export const getNewTokens = () => {
     console.log(`got auth error: ${e.message}`);
   })
 };
+
+export const logout = async () => {
+  const result = await fetch(`${getAUTH_URI()}/logout`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+  });
+  if (result.status !== 200) {
+    throw Error();
+  }
+  tokenManager.dropToken();
+  appHistory.push('/login');
+}

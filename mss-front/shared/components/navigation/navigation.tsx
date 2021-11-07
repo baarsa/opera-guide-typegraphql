@@ -35,7 +35,7 @@ const Li = styled.li<{ isActive: boolean }>`
   }
 `;
 
-export const Navigation = ({ items }: NavigationProps) => (
+const Navigation = ({ items }: NavigationProps) => (
     <Nav as='nav'>
         <Ul>
             { items.map(({ text, link, isActive }) => <Li key={ text } isActive={isActive}>
@@ -44,3 +44,5 @@ export const Navigation = ({ items }: NavigationProps) => (
         </Ul>
     </Nav>
 );
+
+export default Navigation;
