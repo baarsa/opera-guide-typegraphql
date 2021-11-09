@@ -1,5 +1,5 @@
 import fetch from 'cross-fetch';
-const setCookie = require('set-cookie-parser');
+import setCookie from 'set-cookie-parser';
 
 let _inputCookies: {
   [name: string]: string;
@@ -40,7 +40,7 @@ export const serverFetch = {
     }
     return response;
   },
-  setCookies: (cookies) => {
+  setCookies: (cookies: Record<string, string>) => {
     _inputCookies = cookies;
   },
   getCookies: () => {

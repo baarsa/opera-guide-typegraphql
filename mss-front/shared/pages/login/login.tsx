@@ -34,6 +34,9 @@ const Login = () => {
       const res = await api({ login, password });
       tokenManager.setToken(res.token);
       const userInfo = await getUserInfo();
+      if (userInfo === 'Unauthorized') {
+        throw new Error('User info request unauthorized');
+      }
       userInfoVar(userInfo);
       appHistory.push('/');
     } catch (e) {
