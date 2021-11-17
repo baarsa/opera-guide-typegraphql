@@ -25,13 +25,18 @@ jobs:
       - name: Change version number for api package
         working-directory: ./mss-api
         run: npm version ${{ github.event.inputs.versionName }}
-      - name: Commit updated files files
+      - name: Update Changelog
+        uses: thomaseizinger/keep-a-changelog-new-release@v1
+        with:
+          version: ${{ github.event.inputs.versionName }}
+      - name: Commit updated files
         id: make-commit
         run: |
           git add ./mss-front/package.json
           git add ./mss-front/package-lock.json
           git add ./mss-api/package.json
           git add ./mss-api/package-lock.json
+          git add CHANGELOG.md
           git commit --message "Prepare release ${{ github.event.inputs.versionName }}"
           echo "::set-output name=commit::$(git rev-parse HEAD)"
       - name: Push new branch
