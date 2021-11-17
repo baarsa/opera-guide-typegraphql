@@ -23,6 +23,7 @@ const webStats = path.resolve(
 
 export const response = async function (req: express.Request, res: express.Response) {
   const context = { url: req.url };
+  serverFetch.clearCookies(); // очищение куки, оставшихся с прошлого запроса
   serverFetch.setCookies(req.cookies);
   const sheet = new ServerStyleSheet();
   const webExtractor = new ChunkExtractor({ statsFile: webStats })
@@ -35,7 +36,7 @@ export const response = async function (req: express.Request, res: express.Respo
   const styleTags = sheet.getStyleTags()
   sheet.seal();
   res.set('content-type', 'text/html')
-  res.header['set-cookie'] = serverFetch.getCookies().forEach(function(cookieItem) {
+  serverFetch.getCookies().forEach(function(cookieItem) {
     const { name, value, ...options} = cookieItem;
     res.cookie(cookieItem.name, cookieItem.value, options);
   });

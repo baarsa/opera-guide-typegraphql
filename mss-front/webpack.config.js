@@ -71,7 +71,6 @@ const getConfig = target => ({
       "process.env.GRAPHQL_WS_URI": JSON.stringify(process.env.GRAPHQL_WS_URI),
       "process.env.AUTH_URI": JSON.stringify(process.env.AUTH_URI)
     }),
-    ...(development && target === 'web' ? [new BundleAnalyzerPlugin()] : []),
   ],
 })
 
