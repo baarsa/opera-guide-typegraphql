@@ -46,4 +46,7 @@ export const serverFetch = {
   getCookies: () => {
     return _outputCookies;
   },
+  clearCookies: () => {
+    _outputCookies = [];
+  }
 };

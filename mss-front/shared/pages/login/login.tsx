@@ -1,4 +1,5 @@
 import React, { FormEventHandler, useState } from "react";
+import styled from "styled-components";
 import { tokenManager } from "../../token-manager";
 import { appHistory } from "../../history";
 import { getUserInfo, loginApi, signupApi } from "../../auth-api";
@@ -8,6 +9,15 @@ import { Input } from "../../components/input/input";
 import { Button } from "../../components/button/button";
 
 // todo styles
+
+const SwitchButton = styled.div<{ isActive: boolean }>`
+  color: #b3b3b3;
+  cursor: ${ props => props.isActive ? 'default' : 'pointer' };
+  text-decoration: ${ props => props.isActive ? 'underline' : 'none' };
+  &:hover {
+    color: white;
+  }
+`;
 
 const Login = () => {
   const [isSignup, setIsSignup] = useState(false);
@@ -54,8 +64,8 @@ const Login = () => {
     }
   };
   return <form onSubmit={ onSubmit }>
-    <div onClick={() => setIsSignup(false)} style={{ display: isSignup ? 'none' : 'block' }}>Log in</div>
-    <div onClick={() => setIsSignup(true)} style={{ display: isSignup ? 'block' : 'none' }}>Sign up</div>
+    <SwitchButton onClick={() => setIsSignup(false)} isActive={ !isSignup }>Log in</SwitchButton>
+    <SwitchButton onClick={() => setIsSignup(true)} isActive={ isSignup }>Sign up</SwitchButton>
     <Input name='login' placeholder='Enter login...' value={login} onChange={e => setLogin(e.target.value)} />
     <Input name='password' placeholder='Enter password...' value={password} onChange={e => setPassword(e.target.value)} />
     <Button type='submit'>Submit</Button>
