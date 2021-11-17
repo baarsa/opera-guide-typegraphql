@@ -32,7 +32,7 @@ jobs:
           draft: false
           prerelease: false
       - name: Login to YC container registry
-        uses: yc-actions/yc-cr-login@v1
+        uses: yc-actions/yc-cr-login@v0.1-alpha
         with:
           yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
       - name: Build, tag, and push images to Yandex Cloud Container Registry
