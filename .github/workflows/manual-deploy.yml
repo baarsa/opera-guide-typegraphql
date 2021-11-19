@@ -1,0 +1,35 @@
+name: Manual deploy
+on:
+  workflow_dispatch:
+    ref: develop
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Login to YC container registry
+        uses: yc-actions/yc-cr-login@v0.1-alpha
+        with:
+          yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
+      - name: Build, tag, and push images to Yandex Cloud Container Registry
+        env:
+          CR_REGISTRY: crpji9bv5u2hl7eo1aae
+          CR_REPOSITORY_FRONT: mss-front
+          CR_REPOSITORY_API: mss-api
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t cr.yandex/$CR_REGISTRY/$CR_REPOSITORY_FRONT:$IMAGE_TAG ./mss-front
+          docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY_FRONT:$IMAGE_TAG
+          docker build -t cr.yandex/$CR_REGISTRY/$CR_REPOSITORY_API:$IMAGE_TAG ./mss-api
+          docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY_API:$IMAGE_TAG
+      - name: Update cluster deployment for front
+        uses: steebchen/kubectl@v2.0.0
+        with:
+          config: ${{ secrets.KUBE_CONFIG_DATA }}
+          command: set image deployment/mss-front mss-front=cr.yandex/crpji9bv5u2hl7eo1aae/mss-front:${{ github.sha }}
+      - name: Update cluster deployment for api
+        uses: steebchen/kubectl@v2.0.0
+        with:
+          config: ${{ secrets.KUBE_CONFIG_DATA }}
+          command: set image deployment/mss-api mss-api=cr.yandex/crpji9bv5u2hl7eo1aae/mss-api:${{ github.sha }}
