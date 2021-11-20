@@ -3,7 +3,10 @@ on:
   push:
     branches: [ master ]
 jobs:
+  call-ci:
+    uses: baarsa/opera-guide-typegraphql/.github/workflows/services-ci.yml@master
   tag_release:
+    needs: call-ci
     runs-on: ubuntu-latest
     steps:
       - name: Check out code

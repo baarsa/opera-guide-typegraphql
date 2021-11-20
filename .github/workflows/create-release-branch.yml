@@ -7,9 +7,11 @@ on:
         description: 'Name of version  (ie 5.5.0)'
         required: true
 jobs:
+  call-ci:
+    uses: baarsa/opera-guide-typegraphql/.github/workflows/services-ci.yml@master
   createrelease:
+    needs: call-ci
     runs-on: ubuntu-latest
-
     steps:
       - name: Check out code
         uses: actions/checkout@v2

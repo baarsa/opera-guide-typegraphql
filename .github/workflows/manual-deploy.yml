@@ -3,7 +3,10 @@ on:
   workflow_dispatch:
     ref: develop
 jobs:
+  call-ci:
+    uses: baarsa/opera-guide-typegraphql/.github/workflows/services-ci.yml@master
   deploy:
+    needs: call-ci
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
