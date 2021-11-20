@@ -1,6 +1,8 @@
 /.idea
 /coverage
 kube.yml
+kube-yc.yml
+sa.yml
 mss-api/node_modules
 mss-api/public
 mss-api/.env
@@ -10,3 +12,4 @@ mss-front/dist
 mss-front/.eslintcache
 mss-front/.env
 mss-front/coverage
+/sa.yaml
