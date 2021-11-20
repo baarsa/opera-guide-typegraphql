@@ -100,7 +100,7 @@ export const client = new ApolloClient({
     ssrMode: isServer(),
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-    cache: isServer() ? cache : cache.restore(JSON.parse(window.__APOLLO_STATE__)),
+    cache: isServer() || window.__APOLLO_STATE__ === undefined ? cache : cache.restore(JSON.parse(window.__APOLLO_STATE__)),
     link: from([errorLink, authLink, httpLink]) // todo enable ws link
 });
 
