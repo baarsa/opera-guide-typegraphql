@@ -96,10 +96,11 @@ export type UserInfo = {
 }
 
 export const userInfoVar = makeVar<UserInfo | null>(null);
-// todo set apollo cache on server
 export const client = new ApolloClient({
     ssrMode: isServer(),
-    cache,
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+    cache: isServer() ? cache : cache.restore(JSON.parse(window.__APOLLO_STATE__)),
     link: from([errorLink, authLink, httpLink]) // todo enable ws link
 });
 

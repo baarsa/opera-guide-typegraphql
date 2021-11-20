@@ -6,7 +6,6 @@ import React from "react";
 import { ChunkExtractor } from "@loadable/server";
 import path from "path";
 import express from "express";
-import { tokenManager } from "../shared/token-manager";
 import { App } from "../shared/App";
 import { ServerStyleSheet } from 'styled-components'
 import { serverFetch } from "./serverFetch";
@@ -33,6 +32,7 @@ export const response = async function (req: express.Request, res: express.Respo
     </StaticRouter>
   </ApolloProvider>)
   const html = await renderToStringWithData(sheet.collectStyles(jsx));
+  const initialState = client.extract();
   const styleTags = sheet.getStyleTags()
   sheet.seal();
   res.set('content-type', 'text/html')
@@ -53,6 +53,7 @@ export const response = async function (req: express.Request, res: express.Respo
         </head>
         <body style="height: 100%">
           <div id="main" style="height: 100%">${html}</div>
+          <script>window.__APOLLO_STATE__='${JSON.stringify(initialState).replace(/</g, '\\u003c')}';</script>
           ${webExtractor.getScriptTags()}
         </body>
       </html>
