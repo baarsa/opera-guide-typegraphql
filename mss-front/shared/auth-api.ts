@@ -86,7 +86,6 @@ export const getUserInfo = async () => {
 };
 
 export const getNewTokens = async () => {
-  console.log('fetching new tokens...', `${getAUTH_URI()}/refresh`);
   const fetchResult = await fetch(`${getAUTH_URI()}/refresh`, {
     method: 'POST',
     headers: {
@@ -94,7 +93,6 @@ export const getNewTokens = async () => {
     },
     credentials: 'include',
   });
-  console.log(`got auth response: ${JSON.stringify(fetchResult)}`);
   if (fetchResult.status !== 200) throw new Error();
   return fetchResult.json() as Promise<AuthResponse>;
 };
