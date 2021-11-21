@@ -47,7 +47,7 @@ const Navigation = loadable(() => import('./components/navigation/navigation'));
 const Operas = loadable(() => import('./pages/operas/operas'));
 const Login = loadable(() => import('./pages/login/login'));
 
-export const App = () => {
+export const App = ({ shouldSetUserInfo = true }) => {
     const location = useLocation();
     const userInfo = useReactiveVar(userInfoVar);
     useEffect(() => {
@@ -60,8 +60,7 @@ export const App = () => {
             }
             userInfoVar(userInfo);
         }
-        if (userInfoVar() === null) {
-            console.log('effect set info');
+        if (shouldSetUserInfo && userInfoVar() === null) {
             void setUserInfo();
         }
     }, []);
