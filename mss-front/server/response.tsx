@@ -32,7 +32,11 @@ export const response = async function (req: express.Request, res: express.Respo
     </StaticRouter>
   </ApolloProvider>)
   const html = await renderToStringWithData(sheet.collectStyles(jsx));
-  const initialState = client.extract();
+
+  const jsonInitialState = JSON.stringify(client.extract())
+    .replace(/</g, '\\u003c')
+    .replace(/\\"/g, '\\\\"');
+
   const styleTags = sheet.getStyleTags()
   sheet.seal();
   res.set('content-type', 'text/html')
@@ -53,7 +57,7 @@ export const response = async function (req: express.Request, res: express.Respo
         </head>
         <body style="height: 100%">
           <div id="main" style="height: 100%">${html}</div>
-          <script>window.__APOLLO_STATE__='${JSON.stringify(initialState).replace(/</g, '\\u003c')}';</script>
+          <script>window.__APOLLO_STATE__='${jsonInitialState}';</script>
           ${webExtractor.getScriptTags()}
         </body>
       </html>

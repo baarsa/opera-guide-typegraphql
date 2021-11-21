@@ -3,7 +3,7 @@ import { isServer } from "./is-server";
 import { appHistory } from "./history";
 import { serverFetch } from "../server/serverFetch";
 import crossFetch from 'cross-fetch';
-import { UserInfo } from "./apollo-client-setup";
+import { UserInfo, userInfoVar } from "./apollo-client-setup";
 
 const fetch = isServer() ? serverFetch.fetch : crossFetch;
 
@@ -93,7 +93,7 @@ export const getNewTokens = async () => {
     },
     credentials: 'include',
   });
-  if (fetchResult.status !== 200) throw new Error();
+  if (fetchResult.status !== 200) throw new Error(); // todo somewhere not caught
   return fetchResult.json() as Promise<AuthResponse>;
 };
 
@@ -108,6 +108,7 @@ export const logout = async () => {
   if (result.status !== 200) {
     throw Error();
   }
+  userInfoVar(null);
   tokenManager.dropToken();
   appHistory.push('/login');
 }
