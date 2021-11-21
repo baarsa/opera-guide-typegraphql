@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+-   User info block with logout link
+
 ## [1.4.0] - 2021-11-20
 
 ### Added
