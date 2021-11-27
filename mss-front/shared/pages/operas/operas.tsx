@@ -20,6 +20,8 @@ const CreateOperaWrapped = () => {
                     container: 'top-right',
                     message: 'Opera successfully created',
                     type: 'success',
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
                     dismiss: {
                         duration: 4000
                     },

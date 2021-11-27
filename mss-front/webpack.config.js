@@ -46,7 +46,7 @@ const getConfig = target => ({
       },
       {
         test: /\.css$/,
-        use: target === 'node' ? ['css-loader/locals'] : ['style-loader', 'css-loader'],
+        use: target === 'node' ? ['null-loader'] : ['style-loader', 'css-loader'],
       }
     ],
   },
@@ -79,7 +79,7 @@ const getConfig = target => ({
     },
   },
   externals:
-    target === 'node' ? [nodeExternals()] : undefined,
+    target === 'node' ? [nodeExternals({ allowlist: [/\.(?!(?:jsx?|json)$).{1,5}$/i], })] : undefined,
   output: {
     path: path.join(DIST_PATH, target),
     filename: '[name].js',
