@@ -5,6 +5,7 @@ ARG AUTH_URI_ARG
 ENV GRAPHQL_HTTP_URI=$GRAPHQL_HTTP_URI_ARG
 ENV GRAPHQL_WS_URI=$GRAPHQL_WS_URI_ARG
 ENV AUTH_URI=$AUTH_URI_ARG
+ENV NODE_ENV=production
 WORKDIR /app
 COPY ["package.json", "package-lock.json*", "./"]
 RUN npm install --production
