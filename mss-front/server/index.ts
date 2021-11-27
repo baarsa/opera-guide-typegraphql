@@ -7,7 +7,8 @@ import "regenerator-runtime/runtime";
 import 'cross-fetch/polyfill';
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import asyncHandler from "express-async-handler"
+import asyncHandler from "express-async-handler";
+import compression from 'compression';
 import { response } from "./response";
 
 process.env.IS_SERVER = 'true';
@@ -15,13 +16,8 @@ process.env.IS_SERVER = 'true';
 const port = process.env.PORT || 8080;
 const app = express();
 
-app.use(function(req, res, next) {
-  console.log(req.url);
-  next();
-});
-
 app.use(cookieParser());
-console.log(`dirname: ${__dirname}`);
+app.use(compression());
 app.use(express.static(path.join(__dirname, '../..'))); //todo fix dirname
 console.log(__dirname);
 
