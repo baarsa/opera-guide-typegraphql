@@ -9,13 +9,11 @@ const {
 } = require('typescript-loadable-components-plugin')
 
 const DIST_PATH = path.resolve(__dirname, 'dist')
-const production = process.env.NODE_ENV === 'production'
-const development =
-  !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
+const isProduction = process.env.NODE_ENV === 'production'
 
 const getConfig = target => ({
   name: target,
-  mode: development ? 'development' : 'production',
+  mode: isProduction ? 'production' : 'development',
   target,
   entry: target === 'node' ? `./server/index.ts` : './client/index.tsx',
   node: {
@@ -55,12 +53,36 @@ const getConfig = target => ({
   optimization: {
     moduleIds: 'named',
     chunkIds: 'named',
+    splitChunks: {
+      cacheGroups: {
+        react: {
+          test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+          name: 'react',
+          chunks: 'all',
+        },
+        coreJs: {
+          test: /[\\/]node_modules[\\/]core-js[\\/]/,
+          name: 'coreJs',
+          chunks: 'all',
+        },
+        apollo: {
+          test: /[\\/]node_modules[\\/]@apollo[\\/]/,
+          name: 'apollo',
+          chunks: 'all',
+        },
+        otherVendor: {
+          test: /[\\/]node_modules[\\/]((?!(react|react-dom|core-js|@apollo)).*)[\\/]/,
+          name: 'otherVendor',
+          chunks: 'all',
+        },
+      },
+    },
   },
   externals:
-    target === 'node' ? ['@loadable/component', nodeExternals()] : undefined,
+    target === 'node' ? [nodeExternals()] : undefined,
   output: {
     path: path.join(DIST_PATH, target),
-    filename: production ? '[name].js' : '[name].js',
+    filename: '[name].js',
     publicPath: `/dist/${target}/`,
     libraryTarget: target === 'node' ? 'commonjs2' : undefined,
   },
@@ -71,6 +93,7 @@ const getConfig = target => ({
       "process.env.GRAPHQL_WS_URI": JSON.stringify(process.env.GRAPHQL_WS_URI),
       "process.env.AUTH_URI": JSON.stringify(process.env.AUTH_URI)
     }),
+    ...( isProduction || target === 'node' ? [] : [new BundleAnalyzerPlugin({ openAnalyzer: false })])
   ],
 })
 
