@@ -11,6 +11,7 @@ import loadable from '@loadable/component'
 import { useEffect } from "react";
 import { getUserInfo } from "./auth-api";
 import { UserInfo } from "./components/user-info/user-info";
+import { appHistory } from "./history";
 
 const navigationItems = [
     {
@@ -46,24 +47,23 @@ const Navigation = loadable(() => import('./components/navigation/navigation'));
 const Operas = loadable(() => import('./pages/operas/operas'));
 const Login = loadable(() => import('./pages/login/login'));
 
-export const App = () => {
+export const App = ({ shouldSetUserInfo = true }) => {
     const location = useLocation();
     const userInfo = useReactiveVar(userInfoVar);
-    /*
     useEffect(() => {
         async function setUserInfo() {
             console.log('effect set info');
             const userInfo = await getUserInfo();
-            // todo add refresh
+            if (userInfo === 'Unauthorized') {
+                appHistory.push('/login');
+                return;
+            }
             userInfoVar(userInfo);
         }
-        if (userInfoVar() === null) {
-            console.log('effect set info');
-            setUserInfo()
-        };
-    }, [])
-
-     */
+        if (shouldSetUserInfo && userInfoVar() === null) {
+            void setUserInfo();
+        }
+    }, []);
     const actualNavigationItems = navigationItems
       .filter(item => item.needRole === undefined || (userInfo !== null && item.needRole === userInfo.role))
       .map(item => ({
@@ -74,7 +74,7 @@ export const App = () => {
             <AppContainer>
             <ReactNotification/>
                 {/* <PerformanceSubscriber/> */}
-                { /* userInfo !== null && <UserInfo username={userInfo.name} />  */}
+                { userInfo !== null && <UserInfo username={userInfo.name} /> }
                 <Navigation items={ actualNavigationItems }/>
                 <Content>
                     <Switch>

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2021-11-27
+
+### Added
+
+-   User info block with logout link
+
 ## [1.4.0] - 2021-11-20
 
 ### Added
@@ -39,7 +45,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   Basic features
 
-[Unreleased]: https://github.com/baarsa/opera-guide-typegraphql/compare/1.4.0...HEAD
+[Unreleased]: https://github.com/baarsa/opera-guide-typegraphql/compare/1.5.0...HEAD
+
+[1.5.0]: https://github.com/baarsa/opera-guide-typegraphql/compare/1.4.0...1.5.0
 
 [1.4.0]: https://github.com/baarsa/opera-guide-typegraphql/compare/1.3.0...1.4.0
 

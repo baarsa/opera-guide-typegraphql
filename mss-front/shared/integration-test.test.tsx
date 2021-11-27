@@ -19,7 +19,7 @@ const mocks = [
 const renderApp = () => render(
   <MemoryRouter>
     <MockedProvider mocks={mocks}>
-      <App/>
+      <App shouldSetUserInfo={ false } />
     </MockedProvider>
   </MemoryRouter>
 );
