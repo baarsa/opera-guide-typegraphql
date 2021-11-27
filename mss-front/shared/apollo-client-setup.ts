@@ -96,11 +96,21 @@ export type UserInfo = {
 }
 
 export const userInfoVar = makeVar<UserInfo | null>(null);
-export const client = new ApolloClient({
+export const client = (() => {
+  const _cache = cache;
+  try {
+    if (!isServer()) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+      _cache.restore(JSON.parse(window.__APOLLO_STATE__));
+    }
+  } catch (e) {
+    console.log('Failed to restore apollo cache state');
+  }
+  return new ApolloClient({
     ssrMode: isServer(),
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-    cache: isServer() || window.__APOLLO_STATE__ === undefined ? cache : cache.restore(JSON.parse(window.__APOLLO_STATE__)),
+    cache: _cache,
     link: from([errorLink, authLink, httpLink]) // todo enable ws link
-});
+  });
+})();
 
