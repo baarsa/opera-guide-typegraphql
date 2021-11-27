@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   Bundle optimizations
+- Bundle optimizations
+- Styles for notifications
 
 ## [1.5.0] - 2021-11-27
 
