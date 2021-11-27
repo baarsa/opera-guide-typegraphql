@@ -39,7 +39,6 @@ const Login = () => {
       return;
     }
     const api = isSignup ? signupApi : loginApi;
-    // send
     try {
       const res = await api({ login, password });
       tokenManager.setToken(res.token);
@@ -50,10 +49,9 @@ const Login = () => {
       userInfoVar(userInfo);
       appHistory.push('/');
     } catch (e) {
-      //todo network error or 401 ??
       store.addNotification({
         container: 'top-right',
-        message: 'Network error',
+        message: `Error: ${(e as Error).message}`,
         type: 'danger',
         animationIn: ["animate__animated", "animate__fadeIn"],
         animationOut: ["animate__animated", "animate__fadeOut"],

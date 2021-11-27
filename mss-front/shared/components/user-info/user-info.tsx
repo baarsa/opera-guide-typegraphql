@@ -13,7 +13,7 @@ const handleLogoutClick = async () => {
   } catch (e) {
     store.addNotification({
       container: 'top-right',
-      message: 'Network error',
+      message: `Error: ${(e as Error).message}`,
       type: 'danger',
       animationIn: ["animate__animated", "animate__fadeIn"],
       animationOut: ["animate__animated", "animate__fadeOut"],
