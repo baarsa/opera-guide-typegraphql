@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
-import ReactNotification from 'react-notifications-component';
-// import 'react-notifications-component/dist/theme.css'; //todo fix
+import ReactNotification, { store } from "react-notifications-component";
+import 'react-notifications-component/dist/theme.css';
+import 'animate.css';
 import {PerformanceSubscriber} from "./components/performance-subscriber/performance-subscriber";
 import styled from "styled-components";
 import {StyledBlock} from "./components/styled-block/styled-block";
@@ -52,13 +53,25 @@ export const App = ({ shouldSetUserInfo = true }) => {
     const userInfo = useReactiveVar(userInfoVar);
     useEffect(() => {
         async function setUserInfo() {
-            console.log('effect set info');
-            const userInfo = await getUserInfo();
-            if (userInfo === 'Unauthorized') {
-                appHistory.push('/login');
-                return;
+            try {
+                const userInfo = await getUserInfo();
+                if (userInfo === 'Unauthorized') {
+                    appHistory.push('/login');
+                    return;
+                }
+                userInfoVar(userInfo);
+            } catch (e) {
+                store.addNotification({
+                    container: 'top-right',
+                    message: `Error fetching user info: ${(e as Error).message}`,
+                    type: 'danger',
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss: {
+                        duration: 2000
+                    },
+                });
             }
-            userInfoVar(userInfo);
         }
         if (shouldSetUserInfo && userInfoVar() === null) {
             void setUserInfo();

@@ -10,11 +10,6 @@ import { App } from "../shared/App";
 import { ServerStyleSheet } from 'styled-components'
 import { serverFetch } from "./serverFetch";
 
-const nodeStats = path.resolve(
-  __dirname,
-  './loadable-stats.json',
-)
-
 const webStats = path.resolve(
   __dirname,
   '../web/loadable-stats.json',

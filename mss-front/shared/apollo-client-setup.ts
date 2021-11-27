@@ -64,10 +64,13 @@ const errorLink = onError(
       if (networkError !== undefined && (networkError as ServerError).statusCode === 401) {
         return fromPromise(
           getNewTokens()
-            .then(({ token }) => {
+            .then((response) => {
+              if (response === 'Unauthorized') {
+                return false;
+              }
               // Store the new tokens for your auth link
-              tokenManager.setToken(token);
-              return token;
+              tokenManager.setToken(response.token);
+              return response.token;
             })
             .catch(() => {
               return false;

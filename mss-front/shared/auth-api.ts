@@ -31,7 +31,7 @@ export const loginApi = async ({ login, password }: Credentials) => {
     credentials: 'include',
   });
   if (res.status !== 200) {
-    throw Error();
+    throw Error(res.status === 401 ? 'Invalid credentials' :'Network error');
   }
   return res.json() as Promise<AuthResponse>;
 }
@@ -46,7 +46,7 @@ export const signupApi = ({ login, password }: Credentials) => {
     credentials: 'include',
   }).then(res => {
     if (res.status !== 200) {
-      alert('Incorrect values'); //todo make notifications (handle errors in client code)
+      throw Error('Network error');
     }
     return res.json() as Promise<AuthResponse>;
   });
@@ -63,7 +63,7 @@ const fetchUserInfo = async (token: string) => {
     return 'Unauthorized';
   }
   if (response.status !== 200) {
-    throw new Error();
+    throw new Error('Network error');
   }
   return response.json() as Promise<UserInfo>;
 }
@@ -72,15 +72,20 @@ export const getUserInfo = async () => {
   let token = tokenManager.getToken();
   if (token === null) {
     const tokenResponse = await getNewTokens();
+    if (tokenResponse === 'Unauthorized') {
+      return tokenResponse;
+    }
     token = tokenResponse.token;
     tokenManager.setToken(token);
   }
   const response = await fetchUserInfo(token);
   if (response === 'Unauthorized') {
       const tokenResponse = await getNewTokens();
-      const { token } = tokenResponse;
-      tokenManager.setToken(token);
-      return fetchUserInfo(token);
+      if (tokenResponse === 'Unauthorized') {
+        return tokenResponse;
+      }
+      tokenManager.setToken(tokenResponse.token);
+      return fetchUserInfo(tokenResponse.token);
   }
   return response;
 };
@@ -93,7 +98,12 @@ export const getNewTokens = async () => {
     },
     credentials: 'include',
   });
-  if (fetchResult.status !== 200) throw new Error(); // todo somewhere not caught
+  if (fetchResult.status === 401) {
+    return 'Unauthorized';
+  }
+  if (fetchResult.status !== 200) {
+    throw new Error('Network error');
+  }
   return fetchResult.json() as Promise<AuthResponse>;
 };
 
@@ -106,7 +116,7 @@ export const logout = async () => {
     credentials: 'include',
   });
   if (result.status !== 200) {
-    throw Error();
+    throw Error('Network error');
   }
   userInfoVar(null);
   tokenManager.dropToken();
