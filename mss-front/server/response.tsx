@@ -9,6 +9,7 @@ import express from "express";
 import { App } from "../shared/App";
 import { ServerStyleSheet } from 'styled-components'
 import { serverFetch } from "./serverFetch";
+import { createHash } from "crypto";
 
 const webStats = path.resolve(
   __dirname,
@@ -43,6 +44,9 @@ export const response = async function (req: express.Request, res: express.Respo
     res.redirect(302, context.url);
     return;
   }
+  const inlineScript = `window.__APOLLO_STATE__='${jsonInitialState}';`;
+  const inlineScriptHash = createHash('sha256').update(inlineScript).digest('base64');
+  res.set("Content-Security-Policy", `object-src 'none'; script-src 'self' 'sha256-${inlineScriptHash}'`);
   res.send(`
       <!DOCTYPE html>
       <html style="height: 100%">
@@ -52,7 +56,7 @@ export const response = async function (req: express.Request, res: express.Respo
         </head>
         <body style="height: 100%">
           <div id="main" style="height: 100%">${html}</div>
-          <script>window.__APOLLO_STATE__='${jsonInitialState}';</script>
+          <script>${inlineScript}</script>
           ${webExtractor.getScriptTags()}
         </body>
       </html>

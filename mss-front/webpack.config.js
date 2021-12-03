@@ -14,6 +14,8 @@ const isProduction = process.env.NODE_ENV === 'production'
 const getConfig = target => ({
   name: target,
   mode: isProduction ? 'production' : 'development',
+  /* sourcemap без eval, чтобы не нарушать CSP */
+  ...( isProduction ? {} : { devtool: 'cheap-module-source-map' }),
   target,
   entry: target === 'node' ? `./server/index.ts` : './client/index.tsx',
   node: {
