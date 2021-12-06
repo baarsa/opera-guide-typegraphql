@@ -2,11 +2,11 @@ import React, { FormEventHandler, useState } from "react";
 import styled from "styled-components";
 import { tokenManager } from "../../token-manager";
 import { appHistory } from "../../history";
-import { getUserInfo, loginApi, signupApi } from "../../auth-api";
-import { userInfoVar } from "../../apollo-client-setup";
+import { loginApi, signupApi } from "../../auth-api";
 import { store } from "react-notifications-component";
 import { Input } from "../../components/input/input";
 import { Button } from "../../components/button/button";
+import { setUserInfo } from "../../set-user-info";
 
 // todo styles
 
@@ -42,11 +42,8 @@ const Login = () => {
     try {
       const res = await api({ login, password });
       tokenManager.setToken(res.token);
-      const userInfo = await getUserInfo();
-      if (userInfo === 'Unauthorized') {
-        throw new Error('User info request unauthorized');
-      }
-      userInfoVar(userInfo);
+      setUserInfo(res.token);
+      // todo механизм синхронизации UserInfo и токена
       appHistory.push('/');
     } catch (e) {
       store.addNotification({

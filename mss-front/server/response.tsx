@@ -10,15 +10,21 @@ import { App } from "../shared/App";
 import { ServerStyleSheet } from 'styled-components'
 import { serverFetch } from "./serverFetch";
 import { createHash } from "crypto";
+import { tokenManager } from "../shared/token-manager";
 
 const webStats = path.resolve(
   __dirname,
   '../web/loadable-stats.json',
 )
 
+const clearState = async () => {
+  serverFetch.clearCookies();
+  tokenManager.dropToken();
+  await client.clearStore();
+};
+
 export const response = async function (req: express.Request, res: express.Response) {
   const context = { url: req.url };
-  serverFetch.clearCookies(); // очищение куки, оставшихся с прошлого запроса
   serverFetch.setCookies(req.cookies);
   const sheet = new ServerStyleSheet();
   const webExtractor = new ChunkExtractor({ statsFile: webStats })
@@ -28,11 +34,9 @@ export const response = async function (req: express.Request, res: express.Respo
     </StaticRouter>
   </ApolloProvider>)
   const html = await renderToStringWithData(sheet.collectStyles(jsx));
-
   const jsonInitialState = JSON.stringify(client.extract())
     .replace(/</g, '\\u003c')
     .replace(/\\"/g, '\\\\"');
-
   const styleTags = sheet.getStyleTags()
   sheet.seal();
   res.set('content-type', 'text/html')
@@ -40,6 +44,7 @@ export const response = async function (req: express.Request, res: express.Respo
     const { name, value, ...options} = cookieItem;
     res.cookie(cookieItem.name, cookieItem.value, options);
   });
+  await clearState();
   if (context.url !== req.url) {
     res.redirect(302, context.url);
     return;
