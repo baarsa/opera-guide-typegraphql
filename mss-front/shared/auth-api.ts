@@ -3,7 +3,7 @@ import { isServer } from "./is-server";
 import { appHistory } from "./history";
 import { serverFetch } from "../server/serverFetch";
 import crossFetch from 'cross-fetch';
-import { UserInfo, userInfoVar } from "./apollo-client-setup";
+import { setUserInfo } from "./set-user-info";
 
 const fetch = isServer() ? serverFetch.fetch : crossFetch;
 
@@ -52,44 +52,6 @@ export const signupApi = ({ login, password }: Credentials) => {
   });
 };
 
-const fetchUserInfo = async (token: string) => {
-  const response = await fetch(`${getAUTH_URI()}/user`, {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
-  });
-  if (response.status === 401) {
-    return 'Unauthorized';
-  }
-  if (response.status !== 200) {
-    throw new Error('Network error');
-  }
-  return response.json() as Promise<UserInfo>;
-}
-
-export const getUserInfo = async () => {
-  let token = tokenManager.getToken();
-  if (token === null) {
-    const tokenResponse = await getNewTokens();
-    if (tokenResponse === 'Unauthorized') {
-      return tokenResponse;
-    }
-    token = tokenResponse.token;
-    tokenManager.setToken(token);
-  }
-  const response = await fetchUserInfo(token);
-  if (response === 'Unauthorized') {
-      const tokenResponse = await getNewTokens();
-      if (tokenResponse === 'Unauthorized') {
-        return tokenResponse;
-      }
-      tokenManager.setToken(tokenResponse.token);
-      return fetchUserInfo(tokenResponse.token);
-  }
-  return response;
-};
-
 export const getNewTokens = async () => {
   const fetchResult = await fetch(`${getAUTH_URI()}/refresh`, {
     method: 'POST',
@@ -118,7 +80,7 @@ export const logout = async () => {
   if (result.status !== 200) {
     throw Error('Network error');
   }
-  userInfoVar(null);
   tokenManager.dropToken();
+  setUserInfo(null);
   appHistory.push('/login');
 }
