@@ -6,13 +6,11 @@ import 'animate.css';
 import {PerformanceSubscriber} from "./components/performance-subscriber/performance-subscriber";
 import styled from "styled-components";
 import {StyledBlock} from "./components/styled-block/styled-block";
-import { userInfoVar } from "./apollo-client-setup";
-import { useReactiveVar } from '@apollo/react-hooks';
+import { useQuery } from "@apollo/react-hooks";
 import loadable from '@loadable/component'
-import { useEffect } from "react";
-import { getUserInfo } from "./auth-api";
-import { UserInfo } from "./components/user-info/user-info";
-import { appHistory } from "./history";
+import { UserInfo as UserInfoBlock } from "./components/user-info/user-info";
+import { USER_INFO } from "./gql-types/user-info";
+import { UserInfo } from "./set-user-info";
 
 const navigationItems = [
     {
@@ -48,35 +46,9 @@ const Navigation = loadable(() => import('./components/navigation/navigation'));
 const Operas = loadable(() => import('./pages/operas/operas'));
 const Login = loadable(() => import('./pages/login/login'));
 
-export const App = ({ shouldSetUserInfo = true }) => {
+export const App = () => {
     const location = useLocation();
-    const userInfo = useReactiveVar(userInfoVar);
-    useEffect(() => {
-        async function setUserInfo() {
-            try {
-                const userInfo = await getUserInfo();
-                if (userInfo === 'Unauthorized') {
-                    appHistory.push('/login');
-                    return;
-                }
-                userInfoVar(userInfo);
-            } catch (e) {
-                store.addNotification({
-                    container: 'top-right',
-                    message: `Error fetching user info: ${(e as Error).message}`,
-                    type: 'danger',
-                    animationIn: ["animate__animated", "animate__fadeIn"],
-                    animationOut: ["animate__animated", "animate__fadeOut"],
-                    dismiss: {
-                        duration: 2000
-                    },
-                });
-            }
-        }
-        if (shouldSetUserInfo && userInfoVar() === null) {
-            void setUserInfo();
-        }
-    }, []);
+    const userInfo = useQuery<UserInfo, null>(USER_INFO).data?.user ?? null;
     const actualNavigationItems = navigationItems
       .filter(item => item.needRole === undefined || (userInfo !== null && item.needRole === userInfo.role))
       .map(item => ({
@@ -87,7 +59,7 @@ export const App = ({ shouldSetUserInfo = true }) => {
             <AppContainer>
             <ReactNotification/>
                 {/* <PerformanceSubscriber/> */}
-                { userInfo !== null && <UserInfo username={userInfo.name} /> }
+                { userInfo !== null && <UserInfoBlock username={userInfo.name} /> }
                 <Navigation items={ actualNavigationItems }/>
                 <Content>
                     <Switch>

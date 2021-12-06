@@ -2,7 +2,6 @@ import {
     ApolloClient,
     InMemoryCache,
     createHttpLink,
-  makeVar,
   from,
   Observable
 } from '@apollo/client';
@@ -16,6 +15,7 @@ import { ServerError } from "@apollo/react-hooks";
 import fetch from 'cross-fetch';
 import { isServer } from "./is-server";
 import { serverFetch } from "../server/serverFetch";
+import { setUserInfo } from "./set-user-info";
 
 
 const graphqlHttpUri = isServer()
@@ -68,8 +68,8 @@ const errorLink = onError(
               if (response === 'Unauthorized') {
                 return false;
               }
-              // Store the new tokens for your auth link
               tokenManager.setToken(response.token);
+              setUserInfo(response.token);
               return response.token;
             })
             .catch(() => {
@@ -91,14 +91,6 @@ const errorLink = onError(
   }
 );
 
-type UserRole = 'admin' | 'viewer' | 'contributor';
-
-export type UserInfo = {
-  name: string;
-  role: UserRole;
-}
-
-export const userInfoVar = makeVar<UserInfo | null>(null);
 export const client = (() => {
   const _cache = cache;
   try {
