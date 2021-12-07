@@ -7,10 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.0] - 2021-12-06
+
 ### Added
 
-- CSP
-- Setting user info from token
+-   CSP
+-   Setting user info from token
 
 ## [1.6.0] - 2021-11-27
 
@@ -57,7 +59,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   Basic features
 
-[Unreleased]: https://github.com/baarsa/opera-guide-typegraphql/compare/1.6.0...HEAD
+[Unreleased]: https://github.com/baarsa/opera-guide-typegraphql/compare/1.7.0...HEAD
+
+[1.7.0]: https://github.com/baarsa/opera-guide-typegraphql/compare/1.6.0...1.7.0
 
 [1.6.0]: https://github.com/baarsa/opera-guide-typegraphql/compare/1.5.0...1.6.0
 
