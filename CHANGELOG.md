@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.1] - 2021-12-06
+
+### Fixed
+
+-   Clear user info on token renewal failure
+
 ## [1.7.0] - 2021-12-06
 
 ### Added

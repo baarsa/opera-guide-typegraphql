@@ -79,6 +79,7 @@ const errorLink = onError(
           .flatMap((tokenOrFalse) => {
             if (tokenOrFalse === false) {
               // todo реализовать редирект на сервере
+              setUserInfo(null);
               appHistory.push('/login');
               return new Observable((observer) => {
                 observer.error('refresh error');
