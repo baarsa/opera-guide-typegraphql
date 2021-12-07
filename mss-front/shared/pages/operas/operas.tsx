@@ -1,9 +1,10 @@
 import React from 'react';
 import {Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import {store} from "react-notifications-component";
-import { useReactiveVar } from '@apollo/react-hooks';
-import { userInfoVar } from "../../apollo-client-setup";
+import { useQuery } from "@apollo/react-hooks";
 import loadable from "@loadable/component";
+import { USER_INFO } from "../../gql-types/user-info";
+import { UserInfo } from "../../set-user-info";
 
 const OperaList = loadable(() => import('../../components/opera-list/opera-list'));
 const CreateOpera = loadable(() => import('../../components/create-opera/create-opera'));
@@ -34,7 +35,7 @@ const CreateOperaWrapped = () => {
 
 const Operas = () => {
     const match = useRouteMatch();
-    const userInfo = useReactiveVar(userInfoVar);
+    const userInfo = useQuery<UserInfo>(USER_INFO).data?.user ?? null;
     return (
         <Switch>
             <Route path={`${match.path}`} exact={true} component={OperaList} />
